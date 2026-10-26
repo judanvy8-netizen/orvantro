@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ORVANTRO(오르반트로) — AI·웹·게임 스튜디오. MarginKit·Feeroi·SellerBill 베타를 운영합니다. 결제·거래는 아직 불가합니다.">
+  <meta name="theme-color" content="#05070d">
+  <meta property="og:title" content="ORVANTRO (오르반트로)">
+  <meta property="og:description" content="Vision Creates Everything. ORVANTRO beta products for sellers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://orvantro.com/">
+  <link rel="canonical" href="http://orvantro.com/">
+  <title>ORVANTRO (오르반트로)</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <style>
+    :root {
+      --bg: #05070d;
+      --ink: #f4f7fb;
+      --muted: #93a0b4;
+      --line: rgba(148, 163, 184, 0.18);
+      --accent: #4ec1f0;
+      --accent-deep: #1f87b8;
+      --panel: rgba(8, 12, 22, 0.72);
+      --ok: #3ecf8e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+
+    #webgl-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .skip {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      z-index: 40;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(5, 7, 13, 0.85);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .skip:focus { opacity: 1; pointer-events: auto; }
+
+    /* Intro */
+    #intro-ui {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 24px 12vh;
+      cursor: pointer;
+      transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .intro-brand {
+      font-size: clamp(2.4rem, 8vw, 4.2rem);
+      font-weight: 900;
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .intro-prompt {
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.28em;
+      font-weight: 700;
+      animation: breathe 2.4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 1; }
+    }
+
+    .fade-out {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* Main */
+    #main-content {
+      position: relative;
+      z-index: 5;
+      min-height: 100vh;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.9s ease 0.35s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
+      pointer-events: none;
+    }
+
+    #main-content.visible {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    .shell {
+      width: min(1080px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 56px;
+    }
+
+    .wordmark {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+    .nav a:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* Hero — one composition */
+    .hero {
+      min-height: min(72vh, 640px);
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      padding: 24px 0 72px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 56px;
+    }
+
+    .hero-brand {
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      line-height: 0.95;
+      color: #fff;
+    }
+    .hero-co {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    .beta-banner {
+      display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
+      margin: 0 0 28px; padding: 12px 14px;
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      background: rgba(251, 191, 36, 0.08);
+      border-radius: 12px; color: #fde68a; font-size: 0.88rem; line-height: 1.5;
+    }
+    .beta-banner strong { color: #fff; }
+    .beta-pill {
+      display: inline-flex; padding: 4px 10px; border-radius: 999px;
+      border: 1px solid rgba(251, 191, 36, 0.4); color: #fbbf24;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+    }
+    .feedback-box, .premium-box {
+      border: 1px solid var(--line); background: var(--panel);
+      border-radius: 16px; padding: 20px; margin-top: 18px;
+    }
+    .feedback-box .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 640px) { .feedback-box .grid { grid-template-columns: 1fr; } }
+    .feedback-box label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .feedback-box input, .feedback-box select, .feedback-box textarea {
+      width: 100%; border-radius: 10px; border: 1px solid var(--line);
+      background: rgba(5,7,13,0.9); color: var(--ink); padding: 10px 12px; font: inherit;
+    }
+    .feedback-box textarea { min-height: 100px; resize: vertical; }
+    .feedback-box .full { grid-column: 1 / -1; }
+    .premium-box ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); line-height: 1.65; }
+    .premium-box .lock { margin-top: 12px; color: var(--accent); font-size: 0.82rem; font-weight: 700; }
+
+    .hero h2 {
+      font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      max-width: 18em;
+    }
+
+    .hero p {
+      max-width: 34em;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-deep), #156a96);
+      color: #fff;
+    }
+    .btn-ghost {
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 56px;
+    }
+
+    .section-kicker {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.4rem, 3vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.65;
+      max-width: 40em;
+      margin-bottom: 28px;
+      word-break: keep-all;
+    }
+
+    .venture-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .venture {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 22px 22px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      transition: border-color 0.15s ease;
+    }
+    .venture:hover { border-color: rgba(78, 193, 240, 0.45); }
+
+    .venture h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .venture p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .venture-meta {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ok);
+      white-space: nowrap;
+    }
+    .pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .pill.soon { color: var(--accent); }
+
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .phase {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(8, 12, 22, 0.55);
+      backdrop-filter: blur(14px);
+    }
+
+    .phase .num {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .phase h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .phase p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(31, 135, 184, 0.16), rgba(8, 12, 22, 0.7));
+    }
+
+    .contact h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .contact p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      color: #6b778c;
+      font-size: 12px;
+    }
+
+    @media (max-width: 860px) {
+      .venture {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+      .roadmap { grid-template-columns: 1fr; }
+      .hero { min-height: auto; padding-top: 12px; }
+      .shell { width: calc(100% - 28px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      #intro-ui { display: none !important; }
+      #main-content {
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main-content" onclick="enterStudio(true)">본문으로 건너뛰기</a>
+  <canvas id="webgl-canvas" aria-hidden="true"></canvas>
+
+  <div id="intro-ui" role="button" tabindex="0" aria-label="ORVANTRO 스튜디오 입장" onclick="enterStudio()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();enterStudio();}">
+    <div class="intro-brand">ORVANTRO</div>
+    <p class="intro-prompt">CLICK TO ENTER</p>
+  </div>
+
+  <main id="main-content">
+    <div class="shell">
+      <header class="topbar">
+        <div class="wordmark">ORVANTRO</div>
+        <nav class="nav" aria-label="주요 메뉴">
+          <a href="#ventures">Ventures</a>
+          <a href="#premium">Premium</a>
+          <a href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">Insights</a>
+          <a href="#feedback">Feedback</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </header>
+
+      <div class="beta-banner" role="status">
+        <span class="beta-pill">BETA</span>
+        <span><strong>ORVANTRO(오르반트로)</strong> 공식 베타입니다. 프리미엄은 미리보기만 가능하며 <strong>실제 결제·구독·거래는 아직 불가</strong>합니다. 먼저 체험한 뒤 피드백을 남겨 주세요.</span>
+      </div>
+
+      <section class="hero" aria-label="브랜드 소개">
+        <div class="hero-brand">ORVANTRO</div>
+        <div class="hero-co">오르반트로 · Creative Studio</div>
+        <h2>비전으로 만들고, 제품으로 확장합니다.</h2>
+        <p>
+          ORVANTRO(오르반트로)는 AI·웹·게임을 한 스튜디오에서 키우는 기업입니다.
+          지금은 셀러용 웹 제품(MarginKit, Feeroi, SellerBill)을 베타로 운영하며, 사용 데이터와 피드백으로 다음 버전을 만듭니다.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#ventures">제품 체험하기</a>
+          <a class="btn btn-ghost" href="#feedback">피드백 남기기</a>
+        </div>
+      </section>
+
+      <section id="ventures">
+        <div class="section-kicker">Ventures</div>
+        <h2 class="section-title">지금 만들고 있는 것</h2>
+        <p class="section-lead">제품과 Insights 콘솔 모두 ORVANTRO(오르반트로) 베타입니다. 공식 홈 https://orvantro.com/ 에서 연결됩니다.</p>
+
+        <div class="venture-list">
+          <a class="venture" href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">
+            <div>
+              <h3>Insights</h3>
+              <p>키 설정 없이 전 제품 방문자·국가·재방문·경로·UTM과 단기 트래픽 전망(추정)을 보는 1st-party 운영 콘솔.</p>
+            </div>
+            <div class="venture-meta">Web · 1st-party analytics<br>키 불필요 · 결제 데이터 없음</div>
+            <div class="pill">Beta</div>
+          </a>
+
+          <a class="venture" href="https://judanvy8-netizen.github.io/marginkit-pro-beta/" target="_blank" rel="noopener noreferrer">
+            <div>
+              <h3>MarginKit</h3>
+              <p>오픈마켓 정산·원가를 연결해 상품별 실수익과 마진을 바로 보는 셀러용 분석 도구.</p>
+            </div>
+            <div class="venture-meta">Web · Seller tools<br>정산 파일은 브라우저에서만 처리</div>
+            <div class="pill">Beta</div>
+          </a>
+
+          <a class="venture" href="https://judanvy8-netizen.github.io/markit-pro-beta/" target="_blank" rel="noopener noreferrer">
+            <div>
+              <h3>MarginKit Enterprise</h3>
+              <p>수수료·광고·세금 충당금을 반영한 개당 마진·목표가 역산 시뮬레이터.</p>
+            </div>
+            <div class="venture-meta">Web · Simulation<br>채널 교차 비교 포함</div>
+            <div class="pill">Beta</div>
+          </a>
+
+          <a class="venture" href="https://judanvy8-netizen.github.io/feeroi/" target="_blank" rel="noopener noreferrer">
+            <div>
+              <h3>Feeroi</h3>
+              <p>채널 수수료와 광고비를 넣어 실효 ROI·손익분기 광고비를 바로 계산합니다.</p>
+            </div>
+            <div class="venture-meta">Web · Fee ROI<br>건당·월간 손익 추정</div>
+            <div class="pill">Beta</div>
+          </a>
+
+          <a class="venture" href="https://judanvy8-netizen.github.io/sellerbill/" target="_blank" rel="noopener noreferrer">
+            <div>
+              <h3>SellerBill</h3>
+              <p>채널별 매출·수수료·부가세를 묶어 월간 정산·세금 요약을 만듭니다.</p>
+            </div>
+            <div class="venture-meta">Web · Settlement memo<br>브라우저 로컬만 처리</div>
+            <div class="pill">Beta</div>
+          </a>
+        </div>
+      </section>
+
+      <section id="premium">
+        <div class="section-kicker">Premium</div>
+        <h2 class="section-title">프리미엄으로 차별화합니다</h2>
+        <p class="section-lead">베타에서는 기능을 미리 보여 드리고, 결제·계정 연동은 정식 출시에서 엽니다.</p>
+        <div class="premium-box">
+          <ul>
+            <li>팀 워크스페이스 · 권한 · 시나리오 클라우드 동기화</li>
+            <li>채널 API 자동 수집 · 예약 리포트 · PDF/엑셀 고급 내보내기</li>
+            <li>광고비 상한 알림 · 다개월 정산 타임라인</li>
+          </ul>
+          <div class="lock">잠금 · 실제 결제/거래 불가 · 먼저 체험 후 피드백을 주세요</div>
+        </div>
+      </section>
+
+      <section id="feedback">
+        <div class="section-kicker">Feedback</div>
+        <h2 class="section-title">먼저 체험하고, 피드백을 주세요</h2>
+        <p class="section-lead">불편한 점과 필요한 기능을 알려 주시면 ORVANTRO 정식 버전에 반영합니다.</p>
+        <div class="feedback-box">
+          <form onsubmit="return submitOrvantroFeedback(this)">
+            <div class="grid">
+              <div>
+                <label for="fb-product">제품</label>
+                <select id="fb-product" name="product" required>
+                  <option value="ORVANTRO Hub">ORVANTRO Hub</option>
+                  <option>MarginKit</option>
+                  <option>MarginKit Enterprise</option>
+                  <option>Feeroi</option>
+                  <option>SellerBill</option>
+                </select>
+              </div>
+              <div>
+                <label for="fb-rating">만족도</label>
+                <select id="fb-rating" name="rating" required>
+                  <option value="">선택</option>
+                  <option>매우 만족</option>
+                  <option>만족</option>
+                  <option>보통</option>
+                  <option>아쉬움</option>
+                  <option>개선 필요</option>
+                </select>
+              </div>
+              <div>
+                <label for="fb-email">회신 이메일 (선택)</label>
+                <input id="fb-email" name="email" type="email" placeholder="you@example.com">
+              </div>
+              <div class="full">
+                <label for="fb-body">피드백 내용</label>
+                <textarea id="fb-body" name="body" required placeholder="예: 이런 기능이 필요해요 / 결과 해석이 어려워요"></textarea>
+              </div>
+            </div>
+            <div class="cta-row" style="margin-top:14px">
+              <button class="btn btn-primary" type="submit">피드백 메일 보내기</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="roadmap">
+        <div class="section-kicker">Roadmap</div>
+        <h2 class="section-title">확장 순서</h2>
+        <p class="section-lead">한 번에 다 벌리지 않고, 제품이 증명되면 다음 축을 엽니다.</p>
+
+        <div class="roadmap">
+          <article class="phase">
+            <div class="num">01 · NOW</div>
+            <h3>Beta web products</h3>
+            <p>MarginKit·Feeroi·SellerBill 베타 고도화. 결제 없이 체험·피드백으로 제품 완성도를 올립니다.</p>
+          </article>
+          <article class="phase">
+            <div class="num">02 · NEXT</div>
+            <h3>Premium launch</h3>
+            <p>실제 구독·결제를 열고, 팀/API/리포트 프리미엄을 정식 제공합니다.</p>
+          </article>
+          <article class="phase">
+            <div class="num">03 · SCALE</div>
+            <h3>Studio ecosystem</h3>
+            <p>AI·게임·미디어를 묶어 ORVANTRO(오르반트로)를 참여형 스튜디오 브랜드로 키웁니다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" class="contact">
+        <div>
+          <h2>ORVANTRO와 같이 키울 준비가 되었습니다.</h2>
+          <p>협업, 베타 피드백, 투자·파트너십 문의는 아래로 주세요. Made by ORVANTRO (오르반트로).</p>
+        </div>
+        <a class="btn btn-primary" href="mailto:judanvy8@gmail.com">judanvy8@gmail.com</a>
+      </section>
+
+      <footer>
+        <span>&copy; 2026 ORVANTRO (오르반트로). All rights reserved.</span>
+        <span>Vision Creates Everything · Beta</span>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      let entered = false;
+      let isWarping = false;
+      let warpSpeed = 0.05;
+      let engineReady = false;
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      window.enterStudio = function enterStudio(skipWarp) {
+        if (entered) return;
+        entered = true;
+
+        const intro = document.getElementById('intro-ui');
+        const main = document.getElementById('main-content');
+
+        if (reduceMotion || skipWarp || !engineReady) {
+          if (intro) intro.style.display = 'none';
+          main.classList.add('visible');
+          document.body.style.overflow = 'auto';
+          return;
+        }
+
+        isWarping = true;
+        intro.classList.add('fade-out');
+        setTimeout(() => {
+          intro.style.display = 'none';
+          main.classList.add('visible');
+          document.body.style.overflow = 'auto';
+        }, 850);
+      };
+
+      function bootEngine() {
+        if (reduceMotion || typeof THREE === 'undefined') {
+          engineReady = false;
+          return;
+        }
+
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x05070d, 0.012);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 9;
+
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const hyperCore = new THREE.Group();
+
+        const dodecaMesh = new THREE.Mesh(
+          new THREE.DodecahedronGeometry(2.2, 0),
+          new THREE.MeshBasicMaterial({ color: 0x4ec1f0, wireframe: true, transparent: true, opacity: 0.4 })
+        );
+        const icoMesh = new THREE.Mesh(
+          new THREE.IcosahedronGeometry(1.5, 0),
+          new THREE.MeshBasicMaterial({ color: 0x1f87b8, wireframe: true, transparent: true, opacity: 0.7 })
+        );
+        const octaMesh = new THREE.Mesh(
+          new THREE.OctahedronGeometry(0.8, 0),
+          new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true })
+        );
+
+        hyperCore.add(dodecaMesh, icoMesh, octaMesh);
+        scene.add(hyperCore);
+
+        const particleCount = window.innerWidth < 700 ? 1100 : 2000;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount * 3; i += 3) {
+          positions[i] = (Math.random() - 0.5) * 35;
+          positions[i + 1] = (Math.random() - 0.5) * 35;
+          positions[i + 2] = (Math.random() - 0.5) * 60;
+        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({
+          color: 0x4ec1f0,
+          size: 0.05,
+          transparent: true,
+          opacity: 0.75
+        });
+        const starField = new THREE.Points(geometry, material);
+        scene.add(starField);
+
+        let mouseX = 0;
+        let mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+          mouseX = (e.clientX / window.innerWidth - 0.5) * 0.55;
+          mouseY = (e.clientY / window.innerHeight - 0.5) * 0.55;
+        }, { passive: true });
+
+        function animate() {
+          requestAnimationFrame(animate);
+
+          dodecaMesh.rotation.x += 0.003;
+          dodecaMesh.rotation.y += 0.005;
+          icoMesh.rotation.x -= 0.007;
+          icoMesh.rotation.z += 0.006;
+          octaMesh.rotation.y += 0.012;
+          octaMesh.rotation.z -= 0.008;
+
+          if (!isWarping) {
+            hyperCore.position.x += (mouseX - hyperCore.position.x) * 0.05;
+            hyperCore.position.y += (-mouseY - hyperCore.position.y) * 0.05;
+          } else {
+            warpSpeed += 0.09;
+            camera.position.z -= warpSpeed;
+            hyperCore.scale.x += 0.18;
+            hyperCore.scale.y += 0.18;
+            material.opacity = Math.max(0, material.opacity - 0.025);
+          }
+
+          const posArray = starField.geometry.attributes.position.array;
+          for (let i = 0; i < particleCount; i++) {
+            const index = i * 3;
+            posArray[index + 2] += isWarping ? warpSpeed * 2.2 : 0.055;
+            if (posArray[index + 2] > 10) posArray[index + 2] = -50;
+          }
+          starField.geometry.attributes.position.needsUpdate = true;
+          renderer.render(scene, camera);
+        }
+
+        animate();
+        engineReady = true;
+
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      }
+
+      function whenReady(fn) {
+        if (document.readyState === 'complete') fn();
+        else window.addEventListener('load', fn);
+      }
+
+      whenReady(() => {
+        bootEngine();
+        if (reduceMotion) enterStudio(true);
+      });
+    })();
+
+    window.orvantroSubmitFeedback = submitOrvantroFeedback;
+    function submitOrvantroFeedback(form) {
+      const fd = new FormData(form);
+      const product = fd.get('product') || 'ORVANTRO';
+      const rating = fd.get('rating') || '';
+      const email = fd.get('email') || '';
+      const body = fd.get('body') || '';
+      const subject = encodeURIComponent('[ORVANTRO 베타 피드백] ' + product + ' / ' + rating);
+      const text = encodeURIComponent(
+        '제품: ' + product + '\n만족도: ' + rating + '\n회신 이메일: ' + (email || '(없음)') +
+        '\n\n피드백:\n' + body + '\n\n— ' + location.href
+      );
+      window.location.href = 'mailto:judanvy8@gmail.com?subject=' + subject + '&body=' + text;
+      return false;
+    }
+  </script>
+  <script>window.ORVANTRO_ANALYTICS = { site: 'orvantro' };</script>
+  <script src="./orvantro-analytics.js" defer></script>
+</body>
+</html>
