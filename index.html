@@ -1,463 +1,33 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-orvantro-site="orvantro">
 <head>
   <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net data:; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action mailto:; upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="ORVANTRO(오르반트로) — AI·웹·게임 스튜디오. MarginKit·Feeroi·SellerBill 베타를 운영합니다. 결제·거래는 아직 불가합니다.">
   <meta name="theme-color" content="#05070d">
   <meta property="og:title" content="ORVANTRO (오르반트로)">
   <meta property="og:description" content="Vision Creates Everything. ORVANTRO beta products for sellers.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="http://orvantro.com/">
-  <link rel="canonical" href="http://orvantro.com/">
+  <meta property="og:url" content="https://orvantro.com/">
+  <link rel="canonical" href="https://orvantro.com/">
   <title>ORVANTRO (오르반트로)</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-  <style>
-    :root {
-      --bg: #05070d;
-      --ink: #f4f7fb;
-      --muted: #93a0b4;
-      --line: rgba(148, 163, 184, 0.18);
-      --accent: #4ec1f0;
-      --accent-deep: #1f87b8;
-      --panel: rgba(8, 12, 22, 0.72);
-      --ok: #3ecf8e;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "Pretendard Variable", Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
-
-    #webgl-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .skip {
-      position: absolute;
-      left: 16px;
-      top: 16px;
-      z-index: 40;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(5, 7, 13, 0.85);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .skip:focus { opacity: 1; pointer-events: auto; }
-
-    /* Intro */
-    #intro-ui {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      padding: 0 24px 12vh;
-      cursor: pointer;
-      transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .intro-brand {
-      font-size: clamp(2.4rem, 8vw, 4.2rem);
-      font-weight: 900;
-      letter-spacing: 0.28em;
-      text-indent: 0.28em;
-      color: #fff;
-      margin-bottom: 14px;
-    }
-
-    .intro-prompt {
-      font-size: 0.78rem;
-      color: var(--accent);
-      letter-spacing: 0.28em;
-      font-weight: 700;
-      animation: breathe 2.4s ease-in-out infinite;
-    }
-
-    @keyframes breathe {
-      0%, 100% { opacity: 0.35; }
-      50% { opacity: 1; }
-    }
-
-    .fade-out {
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-
-    /* Main */
-    #main-content {
-      position: relative;
-      z-index: 5;
-      min-height: 100vh;
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 0.9s ease 0.35s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
-      pointer-events: none;
-    }
-
-    #main-content.visible {
-      opacity: 1;
-      transform: none;
-      pointer-events: auto;
-    }
-
-    .shell {
-      width: min(1080px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 28px 0 64px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 56px;
-    }
-
-    .wordmark {
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: 0.22em;
-    }
-
-    .nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .nav a {
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 12px;
-      border-radius: 999px;
-      transition: color 0.15s ease, background 0.15s ease;
-    }
-    .nav a:hover {
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    /* Hero — one composition */
-    .hero {
-      min-height: min(72vh, 640px);
-      display: grid;
-      align-content: center;
-      gap: 18px;
-      padding: 24px 0 72px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 56px;
-    }
-
-    .hero-brand {
-      font-size: clamp(3rem, 10vw, 5.5rem);
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      line-height: 0.95;
-      color: #fff;
-    }
-    .hero-co {
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--accent);
-    }
-    .beta-banner {
-      display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
-      margin: 0 0 28px; padding: 12px 14px;
-      border: 1px solid rgba(251, 191, 36, 0.35);
-      background: rgba(251, 191, 36, 0.08);
-      border-radius: 12px; color: #fde68a; font-size: 0.88rem; line-height: 1.5;
-    }
-    .beta-banner strong { color: #fff; }
-    .beta-pill {
-      display: inline-flex; padding: 4px 10px; border-radius: 999px;
-      border: 1px solid rgba(251, 191, 36, 0.4); color: #fbbf24;
-      font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
-    }
-    .feedback-box, .premium-box {
-      border: 1px solid var(--line); background: var(--panel);
-      border-radius: 16px; padding: 20px; margin-top: 18px;
-    }
-    .feedback-box .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    @media (max-width: 640px) { .feedback-box .grid { grid-template-columns: 1fr; } }
-    .feedback-box label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-    .feedback-box input, .feedback-box select, .feedback-box textarea {
-      width: 100%; border-radius: 10px; border: 1px solid var(--line);
-      background: rgba(5,7,13,0.9); color: var(--ink); padding: 10px 12px; font: inherit;
-    }
-    .feedback-box textarea { min-height: 100px; resize: vertical; }
-    .feedback-box .full { grid-column: 1 / -1; }
-    .premium-box ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); line-height: 1.65; }
-    .premium-box .lock { margin-top: 12px; color: var(--accent); font-size: 0.82rem; font-weight: 700; }
-
-    .hero h2 {
-      font-size: clamp(1.15rem, 2.6vw, 1.55rem);
-      font-weight: 650;
-      letter-spacing: -0.02em;
-      color: var(--accent);
-      max-width: 18em;
-    }
-
-    .hero p {
-      max-width: 34em;
-      color: var(--muted);
-      font-size: 1.02rem;
-      line-height: 1.7;
-      word-break: keep-all;
-    }
-
-    .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 46px;
-      padding: 0 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent-deep), #156a96);
-      color: #fff;
-    }
-    .btn-ghost {
-      border: 1px solid var(--line);
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    /* Sections */
-    section {
-      margin-bottom: 56px;
-    }
-
-    .section-kicker {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-size: clamp(1.4rem, 3vw, 1.85rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 10px;
-    }
-
-    .section-lead {
-      color: var(--muted);
-      font-size: 0.98rem;
-      line-height: 1.65;
-      max-width: 40em;
-      margin-bottom: 28px;
-      word-break: keep-all;
-    }
-
-    .venture-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .venture {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
-      gap: 16px;
-      align-items: center;
-      padding: 22px 22px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--panel);
-      backdrop-filter: blur(18px);
-      transition: border-color 0.15s ease;
-    }
-    .venture:hover { border-color: rgba(78, 193, 240, 0.45); }
-
-    .venture h3 {
-      font-size: 1.15rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
-    }
-
-    .venture p {
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.55;
-      word-break: keep-all;
-    }
-
-    .venture-meta {
-      color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.5;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--ok);
-      white-space: nowrap;
-    }
-    .pill::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-    .pill.soon { color: var(--accent); }
-
-    .roadmap {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .phase {
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(8, 12, 22, 0.55);
-      backdrop-filter: blur(14px);
-    }
-
-    .phase .num {
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      color: var(--accent);
-      margin-bottom: 14px;
-    }
-
-    .phase h3 {
-      font-size: 1.05rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-      letter-spacing: -0.02em;
-    }
-
-    .phase p {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
-      word-break: keep-all;
-    }
-
-    .contact {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 28px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(31, 135, 184, 0.16), rgba(8, 12, 22, 0.7));
-    }
-
-    .contact h2 {
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
-    }
-
-    .contact p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.55;
-      word-break: keep-all;
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      padding-top: 22px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-      color: #6b778c;
-      font-size: 12px;
-    }
-
-    @media (max-width: 860px) {
-      .venture {
-        grid-template-columns: 1fr;
-        align-items: start;
-      }
-      .roadmap { grid-template-columns: 1fr; }
-      .hero { min-height: auto; padding-top: 12px; }
-      .shell { width: calc(100% - 28px); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-      }
-      #intro-ui { display: none !important; }
-      #main-content {
-        opacity: 1 !important;
-        transform: none !important;
-        pointer-events: auto !important;
-      }
-    }
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous" defer></script>
+  <link rel="stylesheet" href="./site.css">
 </head>
 <body>
-  <a class="skip" href="#main-content" onclick="enterStudio(true)">본문으로 건너뛰기</a>
+  <a class="skip" href="#main-content">본문으로 건너뛰기</a>
   <canvas id="webgl-canvas" aria-hidden="true"></canvas>
 
-  <div id="intro-ui" role="button" tabindex="0" aria-label="ORVANTRO 스튜디오 입장" onclick="enterStudio()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();enterStudio();}">
+  <div id="intro-ui" role="button" tabindex="0" aria-label="ORVANTRO 스튜디오 입장">
     <div class="intro-brand">ORVANTRO</div>
     <p class="intro-prompt">CLICK TO ENTER</p>
   </div>
 
-  <main id="main-content">
+  <main id="main-content" tabindex="-1">
     <div class="shell">
       <header class="topbar">
         <div class="wordmark">ORVANTRO</div>
@@ -466,6 +36,7 @@
           <a href="#premium">Premium</a>
           <a href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">Insights</a>
           <a href="#feedback">Feedback</a>
+          <a href="#community">Community</a>
           <a href="#contact">Contact</a>
         </nav>
       </header>
@@ -476,7 +47,7 @@
       </div>
 
       <section class="hero" aria-label="브랜드 소개">
-        <div class="hero-brand">ORVANTRO</div>
+        <h1 class="hero-brand">ORVANTRO</h1>
         <div class="hero-co">오르반트로 · Creative Studio</div>
         <h2>비전으로 만들고, 제품으로 확장합니다.</h2>
         <p>
@@ -498,9 +69,9 @@
           <a class="venture" href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">
             <div>
               <h3>Insights</h3>
-              <p>키 설정 없이 전 제품 방문자·국가·재방문·경로·UTM과 단기 트래픽 전망(추정)을 보는 1st-party 운영 콘솔.</p>
+              <p>직접 켠 브라우저의 로컬 방문 기록을 확인하는 도구입니다. 전체 방문자 통계나 관리자 전용 콘솔이 아닙니다.</p>
             </div>
-            <div class="venture-meta">Web · 1st-party analytics<br>키 불필요 · 결제 데이터 없음</div>
+            <div class="venture-meta">Web · Local insights<br>선택한 기기의 기록 · 외부 전송 없음</div>
             <div class="pill">Beta</div>
           </a>
 
@@ -525,7 +96,7 @@
           <a class="venture" href="https://judanvy8-netizen.github.io/feeroi/" target="_blank" rel="noopener noreferrer">
             <div>
               <h3>Feeroi</h3>
-              <p>채널 수수료와 광고비를 넣어 실효 ROI·손익분기 광고비를 바로 계산합니다.</p>
+              <p>채널 수수료와 광고비를 넣어 광고비 회수 배수·손익분기 광고비를 바로 계산합니다.</p>
             </div>
             <div class="venture-meta">Web · Fee ROI<br>건당·월간 손익 추정</div>
             <div class="pill">Beta</div>
@@ -561,7 +132,7 @@
         <h2 class="section-title">먼저 체험하고, 피드백을 주세요</h2>
         <p class="section-lead">불편한 점과 필요한 기능을 알려 주시면 ORVANTRO 정식 버전에 반영합니다.</p>
         <div class="feedback-box">
-          <form onsubmit="return submitOrvantroFeedback(this)">
+          <form id="feedback-form">
             <div class="grid">
               <div>
                 <label for="fb-product">제품</label>
@@ -586,16 +157,17 @@
               </div>
               <div>
                 <label for="fb-email">회신 이메일 (선택)</label>
-                <input id="fb-email" name="email" type="email" placeholder="you@example.com">
+                <input id="fb-email" name="email" type="email" maxlength="254" placeholder="you@example.com">
               </div>
               <div class="full">
                 <label for="fb-body">피드백 내용</label>
-                <textarea id="fb-body" name="body" required placeholder="예: 이런 기능이 필요해요 / 결과 해석이 어려워요"></textarea>
+                <textarea id="fb-body" name="body" maxlength="2000" required placeholder="예: 이런 기능이 필요해요 / 결과 해석이 어려워요"></textarea>
               </div>
             </div>
             <div class="cta-row" style="margin-top:14px">
-              <button class="btn btn-primary" type="submit">피드백 메일 보내기</button>
+              <button class="btn btn-primary" type="submit">메일 앱에서 피드백 작성</button>
             </div>
+            <p class="feedback-help">메일 앱이 열립니다. 내용을 확인하고 직접 전송해 주세요. 비밀번호나 정산 파일 등 민감한 정보는 넣지 마세요.</p>
           </form>
         </div>
       </section>
@@ -624,6 +196,19 @@
         </div>
       </section>
 
+      <section id="community" aria-labelledby="community-heading">
+        <div class="section-kicker">Community</div>
+        <h2 class="section-title" id="community-heading">ORVANTRO의 소식과 이야기</h2>
+        <p class="section-lead">제품 소식과 만드는 과정을 공식 채널에서 만나보세요.</p>
+        <div class="social-links">
+          <a class="social-link" href="https://www.youtube.com/@ORVANTRO" target="_blank" rel="noopener noreferrer"><span class="social-mark" aria-hidden="true">▶</span><span>YouTube<small>@ORVANTRO · 영상과 업데이트</small></span><span aria-hidden="true">↗</span></a>
+          <a class="social-link" href="https://x.com/orvantro" target="_blank" rel="noopener noreferrer"><span class="social-mark" aria-hidden="true">𝕏</span><span>X<small>@orvantro · 짧은 소식</small></span><span aria-hidden="true">↗</span></a>
+          <a class="social-link" href="https://discord.com/channels/1564706724999463019/1564707203318026342" target="_blank" rel="noopener noreferrer"><span class="social-mark" aria-hidden="true">#</span><span>Discord 채널<small>기존 서버 멤버용 · 로그인 필요</small></span><span aria-hidden="true">↗</span></a>
+          <a class="social-link" href="https://www.instagram.com/orvantro" target="_blank" rel="noopener noreferrer"><span class="social-mark" aria-hidden="true">◎</span><span>Instagram<small>@orvantro · 스튜디오의 일상</small></span><span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="feedback-help">외부 사이트가 새 탭에서 열립니다.</p>
+      </section>
+
       <section id="contact" class="contact">
         <div>
           <h2>ORVANTRO와 같이 키울 준비가 되었습니다.</h2>
@@ -632,6 +217,12 @@
         <a class="btn btn-primary" href="mailto:judanvy8@gmail.com">judanvy8@gmail.com</a>
       </section>
 
+      <section class="privacy-note" aria-label="방문 기록 설정">
+        <h2>내 브라우저 방문 기록</h2>
+        <p>기본값은 꺼짐입니다. 켜면 이 기기에서 최근 30일의 방문 기록을 표시하며, 오래된 기록은 다음 방문 때 정리합니다. 외부 분석 서비스로 전송하지 않습니다. 계산기와 Insights는 다른 도메인이라 이 홈페이지의 기록과 합쳐지지 않습니다.</p>
+        <button class="btn btn-ghost" id="analytics-toggle" type="button" aria-pressed="false">로컬 방문 기록 켜기</button>
+        <p id="analytics-status" role="status"></p>
+      </section>
       <footer>
         <span>&copy; 2026 ORVANTRO (오르반트로). All rights reserved.</span>
         <span>Vision Creates Everything · Beta</span>
@@ -639,167 +230,7 @@
     </div>
   </main>
 
-  <script>
-    (function () {
-      let entered = false;
-      let isWarping = false;
-      let warpSpeed = 0.05;
-      let engineReady = false;
-
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      window.enterStudio = function enterStudio(skipWarp) {
-        if (entered) return;
-        entered = true;
-
-        const intro = document.getElementById('intro-ui');
-        const main = document.getElementById('main-content');
-
-        if (reduceMotion || skipWarp || !engineReady) {
-          if (intro) intro.style.display = 'none';
-          main.classList.add('visible');
-          document.body.style.overflow = 'auto';
-          return;
-        }
-
-        isWarping = true;
-        intro.classList.add('fade-out');
-        setTimeout(() => {
-          intro.style.display = 'none';
-          main.classList.add('visible');
-          document.body.style.overflow = 'auto';
-        }, 850);
-      };
-
-      function bootEngine() {
-        if (reduceMotion || typeof THREE === 'undefined') {
-          engineReady = false;
-          return;
-        }
-
-        const canvas = document.getElementById('webgl-canvas');
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x05070d, 0.012);
-
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 9;
-
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        const hyperCore = new THREE.Group();
-
-        const dodecaMesh = new THREE.Mesh(
-          new THREE.DodecahedronGeometry(2.2, 0),
-          new THREE.MeshBasicMaterial({ color: 0x4ec1f0, wireframe: true, transparent: true, opacity: 0.4 })
-        );
-        const icoMesh = new THREE.Mesh(
-          new THREE.IcosahedronGeometry(1.5, 0),
-          new THREE.MeshBasicMaterial({ color: 0x1f87b8, wireframe: true, transparent: true, opacity: 0.7 })
-        );
-        const octaMesh = new THREE.Mesh(
-          new THREE.OctahedronGeometry(0.8, 0),
-          new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true })
-        );
-
-        hyperCore.add(dodecaMesh, icoMesh, octaMesh);
-        scene.add(hyperCore);
-
-        const particleCount = window.innerWidth < 700 ? 1100 : 2000;
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        for (let i = 0; i < particleCount * 3; i += 3) {
-          positions[i] = (Math.random() - 0.5) * 35;
-          positions[i + 1] = (Math.random() - 0.5) * 35;
-          positions[i + 2] = (Math.random() - 0.5) * 60;
-        }
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const material = new THREE.PointsMaterial({
-          color: 0x4ec1f0,
-          size: 0.05,
-          transparent: true,
-          opacity: 0.75
-        });
-        const starField = new THREE.Points(geometry, material);
-        scene.add(starField);
-
-        let mouseX = 0;
-        let mouseY = 0;
-        window.addEventListener('mousemove', (e) => {
-          mouseX = (e.clientX / window.innerWidth - 0.5) * 0.55;
-          mouseY = (e.clientY / window.innerHeight - 0.5) * 0.55;
-        }, { passive: true });
-
-        function animate() {
-          requestAnimationFrame(animate);
-
-          dodecaMesh.rotation.x += 0.003;
-          dodecaMesh.rotation.y += 0.005;
-          icoMesh.rotation.x -= 0.007;
-          icoMesh.rotation.z += 0.006;
-          octaMesh.rotation.y += 0.012;
-          octaMesh.rotation.z -= 0.008;
-
-          if (!isWarping) {
-            hyperCore.position.x += (mouseX - hyperCore.position.x) * 0.05;
-            hyperCore.position.y += (-mouseY - hyperCore.position.y) * 0.05;
-          } else {
-            warpSpeed += 0.09;
-            camera.position.z -= warpSpeed;
-            hyperCore.scale.x += 0.18;
-            hyperCore.scale.y += 0.18;
-            material.opacity = Math.max(0, material.opacity - 0.025);
-          }
-
-          const posArray = starField.geometry.attributes.position.array;
-          for (let i = 0; i < particleCount; i++) {
-            const index = i * 3;
-            posArray[index + 2] += isWarping ? warpSpeed * 2.2 : 0.055;
-            if (posArray[index + 2] > 10) posArray[index + 2] = -50;
-          }
-          starField.geometry.attributes.position.needsUpdate = true;
-          renderer.render(scene, camera);
-        }
-
-        animate();
-        engineReady = true;
-
-        window.addEventListener('resize', () => {
-          camera.aspect = window.innerWidth / window.innerHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-      }
-
-      function whenReady(fn) {
-        if (document.readyState === 'complete') fn();
-        else window.addEventListener('load', fn);
-      }
-
-      whenReady(() => {
-        bootEngine();
-        if (reduceMotion) enterStudio(true);
-      });
-    })();
-
-    window.orvantroSubmitFeedback = submitOrvantroFeedback;
-    function submitOrvantroFeedback(form) {
-      const fd = new FormData(form);
-      const product = fd.get('product') || 'ORVANTRO';
-      const rating = fd.get('rating') || '';
-      const email = fd.get('email') || '';
-      const body = fd.get('body') || '';
-      const subject = encodeURIComponent('[ORVANTRO 베타 피드백] ' + product + ' / ' + rating);
-      const text = encodeURIComponent(
-        '제품: ' + product + '\n만족도: ' + rating + '\n회신 이메일: ' + (email || '(없음)') +
-        '\n\n피드백:\n' + body + '\n\n— ' + location.href
-      );
-      window.location.href = 'mailto:judanvy8@gmail.com?subject=' + subject + '&body=' + text;
-      return false;
-    }
-  </script>
-  <script>window.ORVANTRO_ANALYTICS = { site: 'orvantro' };</script>
+  <script src="./site.js" defer></script>
   <script src="./orvantro-analytics.js" defer></script>
 </body>
 </html>
