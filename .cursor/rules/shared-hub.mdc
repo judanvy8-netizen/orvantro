@@ -1,0 +1,6 @@
+---
+description: "Use the shared collaboration workflow from the repository root AGENTS.md"
+alwaysApply: true
+---
+
+Before starting work in this repository, read `@AGENTS.md` and follow its workflow. Before changing another project repository, first read this hub's `docs/PROJECT-MAP.md`, `docs/PROJECT-PLAN.md`, and latest `docs/WORKLOG.md`, then inspect that repository's own instructions. These files are not automatically copied or synchronized to other repositories.
