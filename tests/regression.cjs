@@ -146,7 +146,7 @@ test('four social targets exactly match user-provided URLs', () => {
   const actual = [...html.matchAll(/<a class="social-link"[^>]*href="([^"]+)"[^>]*>/g)].map(match => match[1]);
   assert.deepEqual(actual, [
     'https://www.youtube.com/@ORVANTRO', 'https://x.com/orvantro',
-    'https://discord.com/channels/1564706724999463019/1564707203318026342', 'https://www.instagram.com/orvantro',
+    'https://discord.gg/zu9W5uWmrr', 'https://www.instagram.com/orvantro',
   ]);
   for (const match of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) assert.match(match[0], /rel="noopener noreferrer"/);
   assert.match(html, /Discord/);
