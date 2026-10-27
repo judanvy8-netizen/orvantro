@@ -22,10 +22,11 @@ function node() {
   return { ...eventTarget(), style: {}, inert: false, focused: false, hidden: false, attrs: {},
     classList: { add: (name) => classes.add(name), remove: (name) => classes.delete(name), contains: (name) => classes.has(name) },
     focus() { this.focused = true; }, setAttribute(key, value) { this.attrs[key] = value; },
+    hasAttribute(key) { return Object.hasOwn(this.attrs, key); }, scrollIntoView(options) { this.scrollOptions = options; this.scrollCount = (this.scrollCount || 0) + 1; },
   };
 }
 function setup(options = {}) {
-  const ids = new Map(['main-content', 'intro-ui', 'webgl-canvas', 'feedback-form', 'analytics-toggle', 'analytics-status'].map(id => [id, node()]));
+  const ids = new Map(['main-content', 'intro-ui', 'webgl-canvas', 'feedback-form', 'analytics-toggle', 'analytics-status', 'ventures', 'premium', 'feedback', 'roadmap', 'community', 'contact'].map(id => [id, node()]));
   const skip = node();
   const document = { ...eventTarget(), readyState: options.loading ? 'loading' : 'complete', documentElement: node(), body: node(), getElementById: id => ids.get(id), querySelector: () => skip };
   const stats = { render: 0, rendererDispose: 0, resourceDispose: 0, constructions: 0, setSize: 0 };
@@ -52,11 +53,12 @@ function setup(options = {}) {
     render() { stats.render++; if (options.renderThrows) throw new Error('Context lost'); }
     dispose() { stats.rendererDispose++; }
   }
-  const context = { ...eventTarget(), document, innerWidth: 1000, innerHeight: 800, devicePixelRatio: 1, location: { origin: 'https://orvantro.com', pathname: '/', search: '?token=secret', hash: '#private' },
+  const context = { ...eventTarget(), document, innerWidth: 1000, innerHeight: 800, devicePixelRatio: 1, location: { origin: 'https://orvantro.com', pathname: '/', search: '?token=secret', hash: options.hash || '#private' },
     matchMedia: () => ({ matches: !!options.reduced }),
     requestAnimationFrame(fn) { const id = ++frameId; frames.set(id, fn); return id; },
     cancelAnimationFrame(id) { frames.delete(id); },
     setTimeout(fn) { timers.push(fn); return timers.length; },
+    clearTimeout(id) { timers[id - 1] = null; },
     FormData: class { constructor(form) { this.form = form; } get(key) { return this.form[key] || ''; } },
   };
   context.window = context;
@@ -65,7 +67,9 @@ function setup(options = {}) {
     MeshBasicMaterial: Material, PointsMaterial: Material, Mesh, Points: Mesh, BufferAttribute: class { constructor(array) { this.array = array; } },
   };
   vm.runInNewContext(source, context);
-  return { context, ids, skip, document, stats, frames, timers, flushTimers() { for (const fn of timers.splice(0)) fn(); } };
+  return { context, ids, skip, document, stats, frames, timers,
+    flushFrames() { for (const [id, fn] of [...frames]) { frames.delete(id); fn(); } },
+    flushTimers() { for (const fn of timers.splice(0)) if (fn) fn(); } };
 }
 function assertRevealed(state) {
   assert.equal(state.document.documentElement.classList.contains('intro-active'), false);
@@ -151,7 +155,7 @@ test('four social targets exactly match user-provided URLs', () => {
   for (const match of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) assert.match(match[0], /rel="noopener noreferrer"/);
   assert.match(html, /Discord/);
 });
-test('external executable has SRI, no inline execution and CSP forbids network telemetry', () => {
+test('local assets and strict script policy avoid external dependencies and telemetry', () => {
   const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
   for (const [, attributes, body] of scripts) {
     assert.match(attributes, /\bsrc=/);
@@ -163,17 +167,97 @@ test('external executable has SRI, no inline execution and CSP forbids network t
   }
   assert.doesNotMatch(html, /\son(?:click|submit|keydown|load|error)=/i);
   const csp = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
-  assert.match(csp, /script-src 'self' https:\/\/cdnjs.cloudflare.com;/);
+  assert.match(csp, /script-src 'self';/);
   assert.match(csp, /connect-src 'none'/);
   assert.doesNotMatch(csp, /script-src[^;]*(?:unsafe-inline|unsafe-eval)/);
+  assert.doesNotMatch(html, /(?:src|href)="https:\/\/(?:cdnjs|cdn\.jsdelivr|fonts\.)/);
+  const icons = [...html.matchAll(/<img src="\.\/(assets\/icons\/[^\"]+\.svg)"[^>]*>/g)];
+  assert.equal(icons.length, 4);
+  for (const match of icons) {
+    const icon = fs.readFileSync(path.join(root, match[1]), 'utf8');
+    assert.match(icon, /<svg/);
+    assert.doesNotMatch(icon, /<script|foreignObject|onload=|href=/i);
+    assert.match(match[0], /alt=""/);
+  }
 });
 test('feedback does not include query strings or fragments', () => {
   const state = setup({ missingThree: true });
   state.context.orvantroSubmitFeedback({ product: 'test', rating: 'ok', email: 'a@example.com', body: 'hello & bye' });
   const target = new URL(state.context.location.href);
   assert.equal(target.protocol, 'mailto:');
+  assert.equal(target.pathname, 'orvantro@gmail.com');
   assert.ok(target.searchParams.get('body').includes('hello & bye'));
   assert.equal(target.searchParams.get('body').includes('token=secret'), false);
   assert.equal(target.searchParams.get('body').includes('#private'), false);
+});
+test('direct known anchors bypass intro and focus their accessible section', () => {
+  for (const id of ['main-content', 'ventures', 'premium', 'feedback', 'roadmap', 'community', 'contact']) {
+    const state = setup({ hash: '#' + id, loading: true });
+    assertRevealed(state);
+    assert.equal(state.ids.get(id).focused, true);
+    assert.equal(state.ids.get(id).attrs.tabindex, '-1');
+    assert.equal(state.ids.get(id).scrollOptions.block, 'start');
+    assert.equal(state.stats.constructions, 0);
+    state.context.dispatch('load');
+    assert.equal(state.stats.constructions, 0);
+  }
+});
+test('encoded valid anchors resolve while malformed or unknown fragments cannot throw', () => {
+  assert.equal(setup({ hash: '#%63ommunity' }).ids.get('community').focused, true);
+  for (const hash of ['#%E0%A4%A', '#%FF', '#__proto__', '#%3Cscript%3E']) {
+    const state = setup({ hash });
+    assert.equal(state.document.documentElement.classList.contains('intro-active'), true);
+    assert.equal(state.ids.get('community').focused, false);
+  }
+});
+test('hash navigation reveals section from an active intro', () => {
+  const state = setup();
+  state.context.location.hash = '#contact';
+  state.context.dispatch('hashchange');
+  assertRevealed(state);
+  assert.equal(state.ids.get('contact').focused, true);
+  assert.equal(state.frames.size, 0);
+});
+test('hash navigation during warp cancels delayed focus takeover', () => {
+  const state = setup();
+  state.ids.get('intro-ui').dispatch('click');
+  state.context.location.hash = '#feedback';
+  state.context.dispatch('hashchange');
+  state.ids.get('main-content').focused = false;
+  state.flushTimers();
+  assert.equal(state.ids.get('feedback').focused, true);
+  assert.equal(state.ids.get('main-content').focused, false);
+  assert.equal(state.stats.rendererDispose, 1);
+});
+test('direct anchors are reapplied after load and browser page restoration', () => {
+  const state = setup({ hash: '#community', loading: true });
+  const target = state.ids.get('community');
+  const initialCount = target.scrollCount;
+  state.context.dispatch('load');
+  state.context.dispatch('pageshow');
+  target.scrollOptions = null; // Simulate native restoration replacing the early scroll.
+  state.flushFrames();
+  assert.equal(target.scrollOptions, null);
+  state.flushFrames();
+  assert.equal(target.scrollOptions.behavior, 'instant');
+  assert.equal(target.scrollOptions.block, 'start');
+  assert.ok(target.scrollCount > initialCount);
+  assert.equal(state.stats.constructions, 0);
+  assert.equal(state.frames.size, 0);
+});
+test('deferred restoration follows the latest valid fragment and ignores invalid fragments', () => {
+  const state = setup({ hash: '#community', loading: true });
+  state.context.dispatch('pageshow');
+  state.context.location.hash = '#contact';
+  state.flushFrames();
+  state.flushFrames();
+  assert.equal(state.ids.get('contact').scrollOptions.behavior, 'instant');
+  const count = state.ids.get('community').scrollCount;
+  state.context.dispatch('pageshow');
+  state.context.location.hash = '#%FF';
+  state.flushFrames();
+  state.flushFrames();
+  assert.equal(state.ids.get('community').scrollCount, count);
+  assert.equal(state.frames.size, 0);
 });
 console.log(`${passed} homepage regression checks passed.`);

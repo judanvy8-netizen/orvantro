@@ -239,7 +239,7 @@
     }
     .btn:hover { transform: translateY(-1px); }
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent-deep), #156a96);
+      background: linear-gradient(135deg, #176d96, #145b81);
       color: #fff;
     }
     .btn-ghost {
@@ -404,7 +404,7 @@
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 10px;
-      color: #6b778c;
+      color: #7c8ba1;
       font-size: 12px;
     }
 
@@ -435,16 +435,18 @@
 #main-content { opacity: 1; transform: none; pointer-events: auto; }
 html.intro-active #intro-ui { display: flex; }
 html.intro-active #main-content { opacity: 0; pointer-events: none; }
-.social-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.social-link { display: flex; align-items: center; gap: 16px; border: 1px solid var(--line); border-radius: 14px; padding: 20px; background: var(--panel); }
-.social-link:hover { border-color: var(--accent); }
-.social-link > span:last-child { margin-left: auto; color: var(--accent); }
-.social-mark { font-size: 26px; color: var(--accent); width: 32px; text-align: center; }
-.social-link small { display: block; color: var(--muted); font-size: 12px; line-height: 1.7; margin-top: 5px; }
 .feedback-help, .privacy-note p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-top: 12px; }
 .privacy-note { border-top: 1px solid var(--line); padding-top: 24px; }
 .privacy-note h2 { font-size: 15px; }
 .privacy-note .btn { margin-top: 12px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
-@media (max-width: 640px) { .social-links { grid-template-columns: 1fr; } .topbar { flex-wrap: wrap; } .hero-brand { overflow-wrap: anywhere; font-size: clamp(2rem, 10vw, 5.5rem); } }
+@media (max-width: 640px) { .topbar { flex-wrap: wrap; } .hero-brand { overflow-wrap: anywhere; font-size: clamp(2rem, 10vw, 5.5rem); } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Compact brand links; local SVGs, no third-party embeds. */
+.social-links { display:flex; flex-wrap:wrap; gap:14px; margin-top:22px; }
+.social-link { display:inline-flex; width:54px; height:54px; align-items:center; justify-content:center; border:1px solid var(--line); border-radius:50%; background:rgba(255,255,255,.025); transition:background .18s,border-color .18s,transform .18s; }
+.social-link img { display:block; width:25px; height:25px; filter:brightness(0) invert(1); opacity:.85; }
+.social-link:hover { background:rgba(78,193,240,.10); border-color:var(--accent); transform:translateY(-2px); }
+.social-link:hover img { opacity:1; }
+#community { margin-bottom:44px; }

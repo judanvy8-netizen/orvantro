@@ -1,0 +1,27 @@
+[
+  {
+    "file": "vendor/three-r128.min.js",
+    "source": "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",
+    "sha256": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2"
+  },
+  {
+    "file": "assets/icons/youtube.svg",
+    "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/youtube.svg",
+    "sha256": "5038808acbbc4e6edda16cbeb1cc6dec80e4e4ee4e227e039c41229fa222aa8c"
+  },
+  {
+    "file": "assets/icons/x.svg",
+    "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/x.svg",
+    "sha256": "693e68863eceb8dc9f72e2acd386ab9c20a10858dab2c076212f7084cb7a32fe"
+  },
+  {
+    "file": "assets/icons/discord.svg",
+    "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/discord.svg",
+    "sha256": "1d364b72c9eaf1fe37d17ca88cd8fb541308dc0f3b09e2ab3b824f380b3493d5"
+  },
+  {
+    "file": "assets/icons/instagram.svg",
+    "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/instagram.svg",
+    "sha256": "f53af2d1fc5292ba1433b5c1faf50005ce6a997fa302d1816989929f379a59dc"
+  }
+]

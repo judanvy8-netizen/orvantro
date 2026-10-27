@@ -6,6 +6,7 @@ window.ORVANTRO_ANALYTICS = { site: 'orvantro' };
       let warpSpeed = 0.05;
       let engineReady = false;
       let stopEngine = function () {};
+      let warpTimer = null;
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const mainPanel = document.getElementById('main-content');
@@ -24,7 +25,16 @@ window.ORVANTRO_ANALYTICS = { site: 'orvantro' };
       });
 
       window.enterStudio = function enterStudio(skipWarp) {
-        if (entered) return;
+        if (entered) {
+          if (skipWarp && isWarping) {
+            clearTimeout(warpTimer);
+            warpTimer = null;
+            document.getElementById('intro-ui').style.display = 'none';
+            revealMain();
+            document.body.style.overflow = 'auto';
+          }
+          return;
+        }
         entered = true;
 
         const intro = document.getElementById('intro-ui');
@@ -39,7 +49,8 @@ window.ORVANTRO_ANALYTICS = { site: 'orvantro' };
 
         isWarping = true;
         intro.classList.add('fade-out');
-        setTimeout(() => {
+        warpTimer = setTimeout(() => {
+          warpTimer = null;
           intro.style.display = 'none';
           revealMain();
           document.body.style.overflow = 'auto';
@@ -174,7 +185,39 @@ window.ORVANTRO_ANALYTICS = { site: 'orvantro' };
         else window.addEventListener('load', fn);
       }
 
+      function revealHashTarget() {
+        let id;
+        try { id = decodeURIComponent((window.location.hash || '').slice(1)); }
+        catch (_) { return false; }
+        if (!['main-content', 'ventures', 'premium', 'feedback', 'roadmap', 'community', 'contact'].includes(id)) return false;
+        const target = document.getElementById(id);
+        if (!target) return false;
+        enterStudio(true);
+        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ behavior: 'instant', block: 'start' });
+        return true;
+      }
+
+      let anchorFrame = null;
+      function restoreHashAfterLayout() {
+        if (anchorFrame !== null) cancelAnimationFrame(anchorFrame);
+        // Reload/history restoration can run after load and replace the early scroll.
+        // Reapply the current fragment after pageshow and the next settled layout.
+        anchorFrame = requestAnimationFrame(() => {
+          anchorFrame = requestAnimationFrame(() => {
+            anchorFrame = null;
+            revealHashTarget();
+          });
+        });
+      }
+
+      // A direct section link should reach that section without a second entry action.
+      revealHashTarget();
+      window.addEventListener('hashchange', revealHashTarget);
+      window.addEventListener('pageshow', restoreHashAfterLayout);
       whenReady(() => {
+        if (revealHashTarget()) { restoreHashAfterLayout(); return; }
         if (entered) return;
         try { bootEngine(); } catch (_) { engineReady = false; }
         if (reduceMotion || !engineReady) { enterStudio(true); return; }
@@ -196,7 +239,7 @@ window.ORVANTRO_ANALYTICS = { site: 'orvantro' };
         '제품: ' + product + '\n만족도: ' + rating + '\n회신 이메일: ' + (email || '(없음)') +
         '\n\n피드백:\n' + body + '\n\n— ' + location.origin + location.pathname
       );
-      window.location.href = 'mailto:judanvy8@gmail.com?subject=' + subject + '&body=' + text;
+      window.location.href = 'mailto:orvantro@gmail.com?subject=' + subject + '&body=' + text;
       return false;
     }
 
