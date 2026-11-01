@@ -450,3 +450,10 @@ html.intro-active #main-content { opacity: 0; pointer-events: none; }
 .social-link:hover { background:rgba(78,193,240,.10); border-color:var(--accent); transform:translateY(-2px); }
 .social-link:hover img { opacity:1; }
 #community { margin-bottom:44px; }
+
+/* Visible bilingual copy works without JavaScript or a language preference store. */
+.translation { display: block; margin-top: .45em; font-size: .9em; font-weight: 400; line-height: 1.6; overflow-wrap: anywhere; }
+.btn { flex-direction: column; gap: 2px; max-width: 100%; padding: 10px 20px; white-space: normal; overflow-wrap: anywhere; text-align: center; }
+.btn .translation { margin-top: 0; }
+.venture > *, .feedback-box .grid > * { min-width: 0; }
+select { max-width: 100%; }

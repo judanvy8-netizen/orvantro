@@ -255,8 +255,8 @@ window.addEventListener('DOMContentLoaded', () => {
   function refresh() {
     const enabled = api.isEnabled();
     button.setAttribute('aria-pressed', String(enabled));
-    button.textContent = enabled ? '로컬 방문 기록 끄기' : '로컬 방문 기록 켜기';
-    status.textContent = enabled ? '이 브라우저에서만 기록 중입니다.' : '방문 기록이 꺼져 있습니다.';
+    button.textContent = enabled ? '로컬 방문 기록 끄기 / Disable local visit history' : '로컬 방문 기록 켜기 / Enable local visit history';
+    status.textContent = enabled ? '이 브라우저에서만 기록 중입니다. / Recording only in this browser.' : '방문 기록이 꺼져 있습니다. / Visit recording is off.';
   }
   button.addEventListener('click', () => { api.setEnabled(!api.isEnabled()); refresh(); });
   refresh();
