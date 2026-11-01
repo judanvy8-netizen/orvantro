@@ -13,4 +13,5 @@ html[data-language=ko] .translation{display:none!important}html[data-language=en
 @media(max-width:850px){.project-visual{grid-column:1/-1;grid-row:4}.venture{grid-template-columns:1fr}.venture-meta{display:block}.bar-note{font-size:8px}}
 @media(max-width:540px){.bar-note{top:100px}.plate-index{font-size:9px}.venture{gap:18px}.project-visual figcaption{font-size:8px}}
 html{color-scheme:dark}.development-plate{border:1px solid #223e57!important}.plate-games{border-left:1px solid #234d6b;border-right:1px solid #234d6b}.hero-intro .disciplines{color:#a7dbf5}:focus-visible{outline:2px solid #4ec1f0;outline-offset:4px}.language-switch button[aria-pressed=true]{color:#4ec1f0}.btn-primary{color:#061321}.btn-primary:hover{color:#061321}.plate-security .trust-diagram{color:#8dd3f0}.plate-games .world-diagram{color:#8fd5f6}
+.diagram-caption{margin:0;font:12px/1.5 Arial,sans-serif;letter-spacing:.02em;color:#b7e8ff}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
