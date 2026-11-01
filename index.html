@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action mailto:; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://orvantro-insights-api.orvantro.workers.dev; object-src 'none'; base-uri 'none'; form-action mailto:; upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="ORVANTRO — 소프트웨어·게임·보안 기술. 웹 제품 베타를 운영하며 게임과 보안 기술로 개발 영역을 넓혀갑니다. Software, games and security technology.">
   <meta name="theme-color" content="#05070d">
@@ -102,8 +102,8 @@
             <figure class="project-visual"><img src="./assets/marginkit-preview.png" alt="MarginKit 베타: 가상 예시 데이터의 수익 지표와 상품별 매출 차트" loading="lazy" width="1142" height="557"><figcaption>렌더링한 베타 화면 · 가상 예시 데이터<span class="translation" lang="en">Rendered beta interface · fictional demo data</span></figcaption></figure>
           </a>
           <a class="venture" href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">
-            <div><div class="project-number">02 / SOFTWARE</div><h3>Insights</h3><p>방문 집계와 로컬 데이터 진단을 구분해 확인합니다 · 운영자 대시보드와 실제 집계는 저장 서버 연결 후 활성화됩니다<span class="translation" lang="en">Visit analytics and local diagnostics stay separate · Central collection and the operator dashboard activate after the server is connected</span></p></div>
-            <div class="venture-meta">로컬 진단 사용 가능<br>실제 집계 서버 연결 준비<span class="translation" lang="en">Local diagnostics available · Central server setup pending</span></div>
+            <div><div class="project-number">02 / SOFTWARE</div><h3>Insights</h3><p>실제 수집된 방문 통계는 운영자 대시보드에서 확인합니다 · 기기 내 진단 기록은 별도로 표시합니다<span class="translation" lang="en">View measured visits in the operator dashboard · Device-local diagnostics stay separate</span></p></div>
+            <div class="venture-meta">실제 방문 집계 연결<br>운영자 로그인으로 확인<span class="translation" lang="en">Central analytics connected · Operator sign-in required</span></div>
             <div class="pill">Open beta ↗</div>
             <figure class="project-visual"><img src="./assets/insights-preview.png" alt="Insights 베타: 가상 샘플 지표와 관측·추정 구분 차트" loading="lazy" width="1344" height="480"><figcaption>렌더링한 베타 화면 · 가상 샘플 통계<span class="translation" lang="en">Rendered beta interface · fictional sample statistics</span></figcaption></figure>
           </a>
@@ -122,7 +122,7 @@
             <li>엑셀 보고서 · 인쇄 및 PDF 저장<span class="translation" lang="en">Excel reports · Print and save as PDF</span></li>
           </ul>
           <a class="btn btn-primary" href="https://judanvy8-netizen.github.io/marginkit-pro-beta/#premium">프리미엄 도구 열기 ↗<span class="translation" lang="en">Open Premium tools</span></a>
-          <p>팀 권한과 클라우드 시나리오는 서버 연결 후 제공 · 채널 API와 예약 발송은 준비 중<span class="translation" lang="en">Team access and cloud scenarios require server setup · Channel API imports and scheduled delivery are still planned</span></p>
+          <p>로그인으로 팀 권한과 클라우드 시나리오 저장·비교 이용 · 채널 API와 예약 발송은 준비 중<span class="translation" lang="en">Sign in for team roles and cloud scenario storage · Channel API imports and scheduled delivery are still planned</span></p>
         </div>
       </section>
 
@@ -212,10 +212,10 @@
       </section>
       <section class="privacy-note" aria-label="중앙 방문 집계 설정">
         <h3>선택적 방문 집계<span class="translation" lang="en">Optional central analytics</span></h3>
-        <p>서버 연결 후 동의한 방문만 집계합니다 · 사이트 이름과 임시 조회·탭 식별자만 전송하며 URL, 검색어, 주문 정보는 보내지 않습니다 · 네트워크 제공자는 연결 처리 중 IP 주소를 처리할 수 있습니다<span class="translation" lang="en">After server setup, only consenting visits are counted · Only the site name and temporary event and tab identifiers are sent · Network providers may process IP addresses to handle connections</span></p>
+        <p>통계 수집에 동의한 방문만 집계합니다 · 사이트 이름과 임시 조회·탭 식별자만 전송하며 URL, 검색어, 주문 정보는 보내지 않습니다 · 네트워크 제공자는 연결 처리 중 IP 주소를 처리할 수 있습니다<span class="translation" lang="en">Only consenting visits are counted · Only the site name and temporary event and tab identifiers are sent · Network providers may process IP addresses to handle connections</span></p>
         <button class="btn btn-ghost" id="central-allow" type="button" disabled>중앙 집계 동의 / Allow central analytics</button>
         <button class="btn btn-ghost" id="central-deny" type="button">동의 철회 / Withdraw consent</button>
-        <p id="central-consent-status" role="status">저장 서버 연결 전 · 수집 꺼짐</p>
+        <p id="central-consent-status" role="status">통계 수집 꺼짐 · 허용하면 현재 페이지부터 집계</p>
       </section>
       <footer>
         <span>&copy; 2026 ORVANTRO. All rights reserved.</span>
