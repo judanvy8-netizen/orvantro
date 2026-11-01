@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko" data-orvantro-site="orvantro">
+<html lang="ko" data-entry="direct" data-orvantro-site="orvantro">
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action mailto:; upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ORVANTRO — AI·웹·게임 스튜디오 / An AI, web and game studio. MarginKit 셀러 도구 베타 / Seller tools in beta. 결제·구독 불가 / Payments and subscriptions unavailable.">
+  <meta name="description" content="ORVANTRO — 소프트웨어·게임·보안 기술. 웹 제품 베타를 운영하며 게임과 보안 기술로 개발 영역을 넓혀갑니다. Software, games and security technology.">
   <meta name="theme-color" content="#05070d">
   <meta property="og:title" content="ORVANTRO">
-  <meta property="og:description" content="AI·웹·게임을 만드는 스튜디오 / A studio building AI, web and game experiences. Explore the MarginKit beta; payments and subscriptions are unavailable.">
+  <meta property="og:description" content="Software · Games · Security. Explore the MarginKit beta and our development direction. Security products are a future direction.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://orvantro.com/">
   <link rel="canonical" href="https://orvantro.com/">
   <title>ORVANTRO</title>
-  <script src="./vendor/three-r128.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous" defer></script>
   <link rel="stylesheet" href="./site.css?v=20261031-1">
+  <link rel="stylesheet" href="./visual.css">
 </head>
 <body>
   <a class="skip" href="#main-content">본문으로 건너뛰기<span class="translation" lang="en">Skip to content</span></a>
@@ -28,60 +28,91 @@
   <main id="main-content" tabindex="-1">
     <div class="shell">
       <header class="topbar">
-        <div class="wordmark">ORVANTRO</div>
+        <a class="wordmark" href="#main-content" aria-label="ORVANTRO home">ORVANTRO</a>
         <nav class="nav" aria-label="주요 메뉴 / Main navigation">
-          <a href="#ventures">Ventures</a>
-          <a href="#premium">Premium</a>
-          <a href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">Insights</a>
-          <a href="#feedback">Feedback</a>
-          <a href="#community">Community</a>
-          <a href="#contact">Contact</a>
+          <a href="#ventures">Work</a><a href="#roadmap">Direction</a><a href="#community">Community</a><a href="#contact">Contact ↗</a>
         </nav>
+        <div class="language-switch" aria-label="언어 / Language"><button type="button" data-language-choice="ko" aria-pressed="true">KR</button><span>/</span><button type="button" data-language-choice="en" aria-pressed="false">EN</button></div>
       </header>
-
-      <div class="beta-banner" role="status">
-        <span class="beta-pill">BETA</span>
-        <span><strong>ORVANTRO</strong> 공식 베타입니다. 프리미엄은 미리보기만 가능하며 <strong>실제 결제·구독·거래는 아직 불가</strong>합니다. 먼저 체험한 뒤 피드백을 남겨 주세요.<span class="translation" lang="en">Official ORVANTRO beta. Premium is a preview only: payments, subscriptions and transactions are not available. Try the beta and share your feedback.</span></span>
-      </div>
-
       <section class="hero" aria-label="브랜드 소개 / About ORVANTRO">
-        <h1 class="hero-brand">ORVANTRO</h1>
-        <div class="hero-co">Creative Studio</div>
-        <h2>비전으로 만들고, 제품으로 확장합니다.<span class="translation" lang="en">Built from vision. Expanded through products.</span></h2>
-        <p>
-          ORVANTRO는 AI·웹·게임을 한 스튜디오에서 키우는 기업입니다.
-          지금은 정산 분석·수익 계산·월간 정산을 묶은 MarginKit을 베타로 운영하며, 피드백으로 다음 버전을 만듭니다.
-        </p>
-        <p class="translation" lang="en">ORVANTRO is a studio developing AI, web and game experiences. Our current beta, MarginKit, brings settlement analysis, profit simulation and monthly settlement together. Feedback helps shape the next version.</p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="#ventures">제품 체험하기<span class="translation" lang="en">Explore products</span></a>
-          <a class="btn btn-ghost" href="#feedback">피드백 남기기<span class="translation" lang="en">Share feedback</span></a>
+        <div class="hero-heading">
+          <div class="section-kicker">INDEPENDENT DEVELOPMENT / ORVANTRO</div>
+          <h1>기술을 만들고,<br>가능성을 넓힙니다.<span class="translation" lang="en">Building tools.<br>Opening possibilities.</span></h1>
+        </div>
+        <div class="hero-intro">
+          <div class="disciplines">Software · Games · Security</div>
+          <p>일에 쓰이는 소프트웨어, 몰입할 수 있는 게임,<br class="desktop-break"> 신뢰할 수 있는 시스템을 향해.<span class="translation" lang="en">Useful software. Immersive games. A foundation for systems people can trust.</span></p>
+          <p class="hero-scope">웹 제품의 베타를 운영하며 게임과 보안 기술로<br class="desktop-break"> 개발 영역을 넓혀갑니다.<span class="translation" lang="en">Our web products are in beta. Games and security technology shape our next steps.</span></p>
+          <a class="text-cta" href="#ventures">만들고 있는 것 보기 <b aria-hidden="true">↗</b><span class="translation" lang="en">Explore our work ↗</span></a>
         </div>
       </section>
 
+      <section class="development-plate" aria-label="세 개발 영역 / Three areas of development">
+        <article class="plate-software">
+          <div class="plate-index"><span>01 / SOFTWARE</span><span>PUBLIC BETA</span></div>
+          <h2>Useful by design.</h2>
+          <div class="ledger-label">MARGINKIT <span>예시 계산 / DEMO</span></div>
+          <div class="ledger-value"><small>추정 총 순이익 / Estimated profit</small><strong>₩391,380</strong></div>
+          <div class="ledger-rule"></div>
+          <div class="ledger-detail"><span>원가가 등록된 5개 상품 기준<span class="translation" lang="en">Across 5 products with registered costs</span></span><span>19.5%<small>추정 마진율 / Estimated margin</small></span></div>
+          <div class="ledger-bars" aria-label="예시 상품 매출 비교: 72만원, 60만원, 45만원, 19만원, 12만원, 10만원. 표시용 근삿값입니다."><i style="--h:100%"></i><i style="--h:83.33%"></i><i style="--h:62.5%"></i><i style="--h:26.39%"></i><i style="--h:16.67%"></i><i style="--h:13.89%"></i><span class="bar-note">상품별 매출 / DEMO</span></div>
+          <p class="plate-caption">복잡한 정산을, 판단할 수 있는 숫자로.<span class="translation" lang="en">From settlement files to decisions you can make.</span></p>
+        </article>
+        <article class="plate-games">
+          <div class="plate-index"><span>02 / GAMES</span><span>EXPLORATION</span></div>
+          <h2>Worlds to enter.</h2>
+          <svg class="world-diagram" viewBox="0 0 360 320" role="img" aria-labelledby="world-title"><title id="world-title">섬 형태 게임 공간의 지형과 이동 경로를 표현한 레벨 설계 도식. 실제 게임 화면이 아닙니다.</title>
+            <g fill="none" stroke="currentColor" stroke-width="1.2">
+              <path d="M32 139C36 103 62 104 84 90S95 47 132 40s47 19 68 21 38-15 65 8 8 42 27 61 39 33 33 63-40 29-59 49-27 39-65 34-46-23-72-15-56 16-73-12-3-48-13-69-15-23-11-41Z"/>
+              <path d="M53 143c2-30 34-30 50-53s10-31 33-31 39 22 63 21 38-13 52 6 8 37 28 56 29 29 24 48-37 27-51 43-22 28-49 22-47-22-75-13-43 12-52-8 0-37-11-57-14-16-12-34Z" opacity=".55"/>
+              <path d="M78 145c8-20 32-16 49-32s16-29 35-21 22 18 43 14 27 2 33 21 33 29 35 52-30 25-47 35-29 22-47 9-25-15-46-11-36 11-39-12 6-22-9-38-10-11-7-17Z" opacity=".45"/>
+              <path d="M131 129c16-18 37-13 51-1s41-8 48 11 6 31-11 42-23 9-43 0-40 8-47-8-8-32 2-44Z" opacity=".4"/>
+              <path d="M61 225 104 193 134 145 183 154 227 110 269 93" stroke-width="2.5" stroke-dasharray="3 6"/>
+              <path d="m183 154 35 60 51 16" stroke-width="1.5" stroke-dasharray="3 6"/>
+              <circle cx="61" cy="225" r="8" fill="#0b2d4c"/><path d="m58 221 7 4-7 4Z" fill="currentColor"/>
+              <circle cx="134" cy="145" r="6" fill="#0b2d4c"/><circle cx="218" cy="214" r="6" fill="#0b2d4c"/>
+              <path d="M269 93V55l23 8-23 9" stroke-width="1.8"/>
+              <path d="M23 34h17m-8-8v17M308 268h17m-8-8v17" opacity=".55"/>
+            </g><text x="17" y="307" fill="currentColor" font-size="10" font-family="monospace" letter-spacing="1.5">LEVEL DESIGN / CONCEPT</text>
+          </svg>
+          <p class="plate-caption">탐험하고, 선택하고, 머무는 경험.<span class="translation" lang="en">Experiences to explore, choose and return to.</span></p>
+        </article>
+        <article class="plate-security">
+          <div class="plate-index"><span>03 / SECURITY</span></div>
+          <h2>Trust,<br>by intent.</h2>
+          <svg class="trust-diagram" viewBox="0 0 210 220" role="img" aria-labelledby="trust-title"><title id="trust-title">입력, 권한 경계, 검토를 표현한 보안 연구 방향 도식. 출시된 보안 제품이 아닙니다.</title><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M35 40V18h140v22M35 180v22h140v-22"/><path d="M20 110h55m60 0h55"/><rect x="75" y="80" width="60" height="60"/><path d="m99 101 12 9-12 9"/><path d="M55 50h100v120H55Z" stroke-dasharray="3 6"/><circle cx="20" cy="110" r="4" fill="#101f36"/><circle cx="190" cy="110" r="4" fill="#101f36"/></g></svg>
+          <p class="security-state">RESEARCH DIRECTION</p>
+          <p class="plate-caption">경계를 세우고,<br>신뢰의 기반을 쌓는 일.<span class="translation" lang="en">Defining boundaries.<br>Building the foundations of trust.</span></p>
+        </article>
+      </section>
+      <div class="plate-note">소프트웨어: 마진킷의 가상 예시 계산 · 게임 / 보안: 개발 방향을 표현한 도식<span class="translation" lang="en">Software: MarginKit demo calculation · Games / Security: conceptual diagrams of our development direction</span></div>
+      <div class="beta-banner" role="status"><span class="beta-pill">OPEN BETA</span><span>먼저 사용해 보고, 다음 버전을 함께 다듬어 주세요. 현재 결제·구독·거래는 제공하지 않습니다.<span class="translation" lang="en">Try the beta and help shape what comes next. Currently, payments, subscriptions and transactions are not available.</span></span><a href="#feedback">Feedback ↗</a></div>
+
       <section id="ventures">
         <div class="section-kicker">Ventures</div>
-        <h2 class="section-title">지금 만들고 있는 것<span class="translation" lang="en">What we are building</span></h2>
-        <p class="section-lead">제품과 Insights 콘솔 모두 ORVANTRO 베타입니다. 공식 홈 https://orvantro.com/ 에서 연결됩니다.</p>
-        <p class="translation" lang="en">Our products and Insights are in beta. This is the official ORVANTRO home.</p>
+        <h2 class="section-title">작동하는 것부터, 하나씩.<span class="translation" lang="en">One working product at a time.</span></h2>
+        <p class="section-lead">소프트웨어는 실제로 사용해 볼 수 있는 베타로 공개합니다. 제품마다 현재 제공하는 범위를 확인해 주세요.</p>
+        <p class="translation" lang="en">Explore the software currently available in beta, with the scope of each product clearly stated.</p>
 
         <div class="venture-list">
           <a class="venture" href="https://judanvy8-netizen.github.io/marginkit-pro-beta/" target="_blank" rel="noopener noreferrer">
-            <div><h3>MarginKit</h3><p>정산 파일 분석부터 수익 시뮬레이션, 광고비 회수와 월간 정산까지. 셀러에게 필요한 계산을 한곳에 모았습니다.<span class="translation" lang="en">Settlement-file analysis, profit simulation, advertising break-even and monthly settlement in one place.</span></p></div>
+            <div><div class="project-number">01 / SOFTWARE</div><h3>MarginKit</h3><p>정산 파일 분석부터 수익 시뮬레이션, 광고비 회수와 월간 정산까지. 셀러에게 필요한 계산을 한곳에 모았습니다.<span class="translation" lang="en">Settlement-file analysis, profit simulation, advertising break-even and monthly settlement in one place.</span></p></div>
             <div class="venture-meta">정산 분석 · 수익 계산 · 월간 정산<br>파일과 계산은 내 브라우저에서 처리<span class="translation" lang="en">Files and calculations stay in your browser</span></div>
-            <div class="pill">Beta</div>
+            <div class="pill">Open beta ↗</div>
+            <figure class="project-visual"><img src="./assets/marginkit-preview.png" alt="MarginKit 베타: 가상 예시 데이터의 수익 지표와 상품별 매출 차트" loading="lazy" width="1142" height="557"><figcaption>렌더링한 베타 화면 · 가상 예시 데이터<span class="translation" lang="en">Rendered beta interface · fictional demo data</span></figcaption></figure>
           </a>
           <a class="venture" href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">
-            <div><h3>Insights</h3><p>직접 켠 브라우저의 로컬 방문 기록을 확인합니다. 전체 방문자 통계나 관리자 전용 콘솔이 아닙니다.<span class="translation" lang="en">Inspect visits recorded locally in a browser where recording was enabled. This is not site-wide visitor analytics or an administrator-only console.</span></p></div>
+            <div><div class="project-number">02 / SOFTWARE</div><h3>Insights</h3><p>직접 켠 브라우저의 로컬 방문 기록을 확인합니다. 전체 방문자 통계나 관리자 전용 콘솔이 아닙니다.<span class="translation" lang="en">Inspect visits recorded locally in a browser where recording was enabled. This is not site-wide visitor analytics or an administrator-only console.</span></p></div>
             <div class="venture-meta">로컬 기록 · JSON 확인<br>외부 분석 전송 없음<span class="translation" lang="en">Local records and JSON inspection; no external analytics transmission</span></div>
-            <div class="pill">Beta</div>
+            <div class="pill">Open beta ↗</div>
+            <figure class="project-visual"><img src="./assets/insights-preview.png" alt="Insights 베타: 가상 샘플 지표와 관측·추정 구분 차트" loading="lazy" width="1344" height="480"><figcaption>렌더링한 베타 화면 · 가상 샘플 통계<span class="translation" lang="en">Rendered beta interface · fictional sample statistics</span></figcaption></figure>
           </a>
         </div>
       </section>
 
       <section id="premium">
         <div class="section-kicker">Premium</div>
-        <h2 class="section-title">프리미엄으로 차별화합니다<span class="translation" lang="en">Premium preview</span></h2>
+        <h2 class="section-title">다음 기능은, 검증을 거친 뒤에.<span class="translation" lang="en">Next, after validation.</span></h2>
         <p class="section-lead">베타에서는 기능을 미리 보여 드리고, 결제·계정 연동은 정식 출시에서 엽니다.</p>
         <p class="translation" lang="en">The beta previews future features. Payments and account integration are not available in this beta.</p>
         <div class="premium-box">
@@ -142,26 +173,14 @@
 
       <section id="roadmap">
         <div class="section-kicker">Roadmap</div>
-        <h2 class="section-title">확장 순서<span class="translation" lang="en">Our direction</span></h2>
-        <p class="section-lead">한 번에 다 벌리지 않고, 제품이 증명되면 다음 축을 엽니다.</p>
-        <p class="translation" lang="en">We focus on proving each product before expanding into the next area.</p>
+        <h2 class="section-title">하나의 이름, 세 가지 개발 영역.<span class="translation" lang="en">One name. Three areas of development.</span></h2>
+        <p class="section-lead">실제로 쓸 수 있는 도구에서 시작해, 게임 경험과 보안 기술까지. 각 영역의 진행 상태를 분명하게 공개합니다.</p>
+        <p class="translation" lang="en">From practical tools to game experiences and security technology, with a clear account of what is available and what is still ahead.</p>
 
         <div class="roadmap">
-          <article class="phase">
-            <div class="num">01 · NOW</div>
-            <h3>Beta web products</h3>
-            <p>MarginKit 통합 셀러 도구 베타 고도화. 결제 없이 체험·피드백으로 제품 완성도를 올립니다.<span class="translation" lang="en">Improve the MarginKit beta through trials and feedback, with no payments.</span></p>
-          </article>
-          <article class="phase">
-            <div class="num">02 · NEXT</div>
-            <h3>Premium launch</h3>
-            <p>실제 구독·결제를 열고, 팀/API/리포트 프리미엄을 정식 제공합니다.<span class="translation" lang="en">Future direction: subscriptions, payments and premium team, API and reporting features. These are not available yet.</span></p>
-          </article>
-          <article class="phase">
-            <div class="num">03 · SCALE</div>
-            <h3>Studio ecosystem</h3>
-            <p>AI·게임·미디어를 묶어 ORVANTRO를 참여형 스튜디오 브랜드로 키웁니다.<span class="translation" lang="en">Grow ORVANTRO into a participatory studio spanning AI, games and media.</span></p>
-          </article>
+          <article class="phase"><div class="num">01 / AVAILABLE IN BETA</div><h3>Software</h3><p>MarginKit과 Insights. 계산·기록·분석을 위한 웹 도구를 실제 사용과 피드백으로 다듬습니다.<span class="translation" lang="en">MarginKit and Insights: web tools for calculations, records and analysis, refined through use and feedback.</span></p></article>
+          <article class="phase"><div class="num">02 / DEVELOPMENT DIRECTION</div><h3>Games</h3><p>플레이어가 탐험하고 선택하는 세계. 게임 시스템과 경험을 개발하는 방향으로 확장합니다.<span class="translation" lang="en">Worlds that players can explore and shape. Developing game systems and experiences is part of our direction.</span></p></article>
+          <article class="phase"><div class="num">03 / RESEARCH DIRECTION</div><h3>Security</h3><p>안전한 시스템을 위한 보안 기술과 기반을 연구합니다. 기업용 보안 제품과 계약 서비스는 향후 목표입니다.<span class="translation" lang="en">Researching security technology and foundations for safer systems. Enterprise security products and services are future goals.</span></p></article>
         </div>
       </section>
 
@@ -178,7 +197,7 @@
 
       <section id="contact" class="contact">
         <div>
-          <h2>ORVANTRO와 같이 키울 준비가 되었습니다.<span class="translation" lang="en">Let’s build with ORVANTRO</span></h2>
+          <h2>다음 가능성에 대해 이야기해요.<span class="translation" lang="en">Let’s talk about what comes next.</span></h2>
           <p>협업, 베타 피드백, 투자·파트너십 문의는 아래로 주세요. Made by ORVANTRO.<span class="translation" lang="en">Contact us for collaboration, beta feedback, investment or partnership enquiries. Made by ORVANTRO.</span></p>
         </div>
         <a class="btn btn-primary" href="mailto:orvantro@gmail.com">orvantro@gmail.com</a>
@@ -192,12 +211,13 @@
       </section>
       <footer>
         <span>&copy; 2026 ORVANTRO. All rights reserved.</span>
-        <span>Vision Creates Everything · Beta</span>
+        <span>Software · Games · Security</span>
       </footer>
     </div>
   </main>
 
   <script src="./site.js?v=20261031-1" defer></script>
   <script src="./orvantro-analytics.js" defer></script>
+  <script src="./locale.js" defer></script>
 </body>
 </html>

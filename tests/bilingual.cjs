@@ -12,7 +12,9 @@ test('brand names remain English while Korean descriptions remain', () => {
   assert.match(html, /<title>ORVANTRO<\/title>/);
   assert.match(html, /property="og:title" content="ORVANTRO"/);
   assert.doesNotMatch(html, /오르반트로/);
-  assert.match(html, /AI·웹·게임/);
+  assert.match(html, /소프트웨어·게임·보안 기술/);
+  assert.match(html, /Software · Games · Security/);
+  assert.match(html, /Enterprise security products and services are future goals/);
   assert.match(html, /<html lang="ko"/);
 });
 test('all product and safety sections have English copy available without JavaScript', () => {

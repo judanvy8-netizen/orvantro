@@ -219,6 +219,7 @@ window.ORVANTRO_ANALYTICS = { site: 'orvantro' };
       whenReady(() => {
         if (revealHashTarget()) { restoreHashAfterLayout(); return; }
         if (entered) return;
+        if (document.documentElement.hasAttribute('data-entry')) { enterStudio(true); return; }
         try { bootEngine(); } catch (_) { engineReady = false; }
         if (reduceMotion || !engineReady) { enterStudio(true); return; }
         document.documentElement.classList.add('intro-active');
