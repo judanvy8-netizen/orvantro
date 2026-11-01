@@ -24,7 +24,7 @@ test('all product and safety sections have English copy available without JavaSc
   }
   assert.match(html, /Off by default/);
   assert.match(html, /No data is sent to external analytics services/);
-  assert.match(html, /not site-wide visitor analytics/);
+  assert.match(html, /Central server setup pending/);
   assert.match(html, /payments, subscriptions and transactions are not available/);
   assert.match(html, /Review and send the message yourself/);
 });
@@ -60,8 +60,10 @@ test('static responsive safeguards allow longer bilingual labels to wrap', () =>
   assert.match(css, /\.btn \{ flex-direction: column;[^}]*max-width: 100%;[^}]*white-space: normal/);
   assert.match(css, /\.venture > \*, \.feedback-box \.grid > \* \{ min-width: 0; \}/);
 });
-test('no language tracking, external script or analytics permission added', () => {
+test('network remains disabled until server deployment and central consent stays separate', () => {
   assert.match(html, /connect-src 'none'/);
+  assert.match(html, /id="central-allow"[^>]*disabled/);
+  assert.match(fs.readFileSync(path.join(root, 'central-config.js'), 'utf8'), /enabled: false/);
   assert.doesNotMatch(html, /<script[^>]+src="https:/);
   assert.doesNotMatch(js, /navigator\.language|language.*localStorage|localStorage.*language/);
 });
