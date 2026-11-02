@@ -1,263 +1,147 @@
+'use strict';
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const vm = require('node:vm');
-const root = path.join(__dirname, '..');
-const source = fs.readFileSync(path.join(root, 'site.js'), 'utf8');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const css = fs.readFileSync(path.join(root, 'site.css'), 'utf8');
+const { read, attributes, browser, settle } = require('./helpers.cjs');
+const html = read('index.html');
 let passed = 0;
-function test(name, run) { run(); passed++; console.log('PASS', name); }
-function eventTarget() {
-  const handlers = new Map();
-  return {
-    handlers,
-    addEventListener(type, fn) { if (!handlers.has(type)) handlers.set(type, new Set()); handlers.get(type).add(fn); },
-    removeEventListener(type, fn) { handlers.get(type)?.delete(fn); },
-    dispatch(type, event = {}) { for (const fn of [...(handlers.get(type) || [])]) fn(event); },
-  };
+async function test(name, run) { await run(); passed++; console.log('PASS', name); }
+function analytics(options = {}) {
+  const state = browser(options);
+  state.context.ORVANTRO_ANALYTICS = { site: 'orvantro' };
+  state.run('orvantro-analytics.js');
+  state.run('central-config.js');
+  state.run('central-collector.js');
+  state.boot();
+  return state;
 }
-function node() {
-  const classes = new Set();
-  return { ...eventTarget(), style: {}, inert: false, focused: false, hidden: false, attrs: {},
-    classList: { add: (name) => classes.add(name), remove: (name) => classes.delete(name), contains: (name) => classes.has(name) },
-    focus() { this.focused = true; }, setAttribute(key, value) { this.attrs[key] = value; },
-    hasAttribute(key) { return Object.hasOwn(this.attrs, key); }, scrollIntoView(options) { this.scrollOptions = options; this.scrollCount = (this.scrollCount || 0) + 1; },
-  };
-}
-function setup(options = {}) {
-  const ids = new Map(['main-content', 'intro-ui', 'webgl-canvas', 'feedback-form', 'analytics-toggle', 'analytics-status', 'ventures', 'premium', 'feedback', 'roadmap', 'community', 'contact'].map(id => [id, node()]));
-  const skip = node();
-  const document = { ...eventTarget(), readyState: options.loading ? 'loading' : 'complete', documentElement: node(), body: node(), getElementById: id => ids.get(id), querySelector: () => skip };
-  const stats = { render: 0, rendererDispose: 0, resourceDispose: 0, constructions: 0, setSize: 0 };
-  const timers = [];
-  const frames = new Map();
-  let frameId = 0;
-  class Object3D {
-    constructor() { this.children = []; this.position = { x: 0, y: 0, z: 0 }; this.rotation = { x: 0, y: 0, z: 0 }; this.scale = { x: 1, y: 1, z: 1 }; }
-    add(...children) { this.children.push(...children); }
-    traverse(fn) { fn(this); for (const child of this.children) child.traverse(fn); }
-    updateProjectionMatrix() {}
-  }
-  class Geometry {
-    constructor() { this.attributes = {}; }
-    setAttribute(key, value) { this.attributes[key] = value; }
-    dispose() { stats.resourceDispose++; }
-  }
-  class Material { constructor(props) { Object.assign(this, props); } dispose() { stats.resourceDispose++; } }
-  class Mesh extends Object3D { constructor(geometry, material) { super(); this.geometry = geometry; this.material = material; } }
-  class Renderer {
-    constructor() { stats.constructions++; if (options.webglThrows) throw new Error('WebGL unavailable'); }
-    setSize() { stats.setSize++; if (options.sizeThrows) throw new Error('Context failed during setup'); }
-    setPixelRatio() {}
-    render() { stats.render++; if (options.renderThrows) throw new Error('Context lost'); }
-    dispose() { stats.rendererDispose++; }
-  }
-  const context = { ...eventTarget(), document, innerWidth: 1000, innerHeight: 800, devicePixelRatio: 1, location: { origin: 'https://orvantro.com', pathname: '/', search: '?token=secret', hash: options.hash || '#private' },
-    matchMedia: () => ({ matches: !!options.reduced }),
-    requestAnimationFrame(fn) { const id = ++frameId; frames.set(id, fn); return id; },
-    cancelAnimationFrame(id) { frames.delete(id); },
-    setTimeout(fn) { timers.push(fn); return timers.length; },
-    clearTimeout(id) { timers[id - 1] = null; },
-    FormData: class { constructor(form) { this.form = form; } get(key) { return this.form[key] || ''; } },
-  };
-  context.window = context;
-  if (!options.missingThree) context.THREE = { Scene: Object3D, Group: Object3D, PerspectiveCamera: Object3D, FogExp2: class {}, WebGLRenderer: Renderer,
-    DodecahedronGeometry: Geometry, IcosahedronGeometry: Geometry, OctahedronGeometry: Geometry, BufferGeometry: Geometry,
-    MeshBasicMaterial: Material, PointsMaterial: Material, Mesh, Points: Mesh, BufferAttribute: class { constructor(array) { this.array = array; } },
-  };
-  vm.runInNewContext(source, context);
-  return { context, ids, skip, document, stats, frames, timers,
-    flushFrames() { for (const [id, fn] of [...frames]) { frames.delete(id); fn(); } },
-    flushTimers() { for (const fn of timers.splice(0)) if (fn) fn(); } };
-}
-function assertRevealed(state) {
-  assert.equal(state.document.documentElement.classList.contains('intro-active'), false);
-  assert.equal(state.ids.get('main-content').inert, false);
-  assert.equal(state.ids.get('main-content').classList.contains('visible'), true);
-  assert.equal(state.ids.get('main-content').focused, true);
-}
-test('missing THREE reveals accessible main content', () => assertRevealed(setup({ missingThree: true })));
-test('WebGL constructor failure reveals main content', () => assertRevealed(setup({ webglThrows: true })));
-test('partial setup failure releases renderer', () => {
-  const state = setup({ sizeThrows: true });
-  assertRevealed(state);
-  assert.equal(state.stats.rendererDispose, 1);
-});
-test('render failure cancels already scheduled animation', () => {
-  const state = setup({ renderThrows: true });
-  assertRevealed(state);
-  assert.equal(state.frames.size, 0);
-  assert.equal(state.stats.rendererDispose, 1);
-});
-test('reduced motion never constructs WebGL', () => {
-  const state = setup({ reduced: true });
-  assertRevealed(state);
-  assert.equal(state.stats.constructions, 0);
-});
-test('working intro makes only the intro interactive', () => {
-  const state = setup();
-  assert.equal(state.document.documentElement.classList.contains('intro-active'), true);
-  assert.equal(state.ids.get('main-content').inert, true);
-  assert.equal(state.ids.get('intro-ui').focused, true);
-});
-test('skip releases graphics resources and event handlers', () => {
-  const state = setup();
-  const queued = [...state.frames.values()][0];
-  state.skip.dispatch('click');
-  assertRevealed(state);
-  assert.equal(state.frames.size, 0);
-  assert.equal(state.stats.rendererDispose, 1);
-  assert.equal(state.stats.resourceDispose, 8);
-  assert.equal(state.context.handlers.get('resize').size, 0);
-  assert.equal(state.context.handlers.get('mousemove').size, 0);
-  const sizeBefore = state.stats.setSize;
-  state.context.dispatch('resize');
-  queued();
-  assert.equal(state.stats.setSize, sizeBefore);
-  assert.equal(state.frames.size, 0);
-});
-test('click warp terminates and repeated entry is harmless', () => {
-  const state = setup();
-  state.ids.get('intro-ui').dispatch('click');
-  assert.equal(state.timers.length, 1);
-  state.flushTimers();
-  assertRevealed(state);
-  state.context.enterStudio();
-  assert.equal(state.stats.rendererDispose, 1);
-  assert.equal(state.frames.size, 0);
-});
-for (const key of ['Enter', ' ']) test('keyboard entry: ' + JSON.stringify(key), () => {
-  const state = setup(); let prevented = false;
-  state.ids.get('intro-ui').dispatch('keydown', { key, preventDefault() { prevented = true; } });
-  assert.equal(prevented, true);
-  state.flushTimers();
-  assertRevealed(state);
-});
-test('skip before load prevents delayed intro takeover', () => {
-  const state = setup({ loading: true });
-  state.skip.dispatch('click');
-  state.context.dispatch('load');
-  assertRevealed(state);
-  assert.equal(state.stats.constructions, 0);
-});
-test('no-JavaScript CSS leaves main content and social links visible', () => {
-  assert.match(css, /#intro-ui\s*\{\s*display:\s*none;\s*\}\s*#main-content\s*\{\s*opacity:\s*1;\s*transform:\s*none;\s*pointer-events:\s*auto;\s*\}/);
-  assert.doesNotMatch(html, /<html[^>]*class="[^"]*intro-active/);
-  assert.doesNotMatch(html, /<main[^>]*\binert\b/);
-});
-test('four social targets exactly match user-provided URLs', () => {
-  const actual = [...html.matchAll(/<a class="social-link"[^>]*href="([^"]+)"[^>]*>/g)].map(match => match[1]);
-  assert.deepEqual(actual, [
-    'https://www.youtube.com/@ORVANTRO', 'https://x.com/orvantro',
-    'https://discord.gg/zu9W5uWmrr', 'https://www.instagram.com/orvantro',
-  ]);
-  for (const match of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)) assert.match(match[0], /rel="noopener noreferrer"/);
-  assert.match(html, /Discord/);
-});
-test('local assets and strict script policy avoid external dependencies and telemetry', () => {
-  const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
-  for (const [, attributes, body] of scripts) {
-    assert.match(attributes, /\bsrc=/);
-    assert.equal(body.trim(), '');
-    if (/src="https:/.test(attributes)) {
-      assert.match(attributes, /integrity="sha384-[A-Za-z0-9+/=]+"/);
-      assert.match(attributes, /crossorigin="anonymous"/);
+(async () => {
+  await test('main content and fragment destinations are available without an entry gate', () => {
+    const main = html.match(/<main\b[^>]*>/i)?.[0];
+    assert.ok(main); assert.equal(Object.hasOwn(attributes(main), 'inert'), false);
+    assert.doesNotMatch(html, /id="(?:intro-ui|webgl-canvas)"/);
+    const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]);
+    assert.equal(new Set(ids).size, ids.length, 'duplicate ids');
+    for (const [, href] of html.matchAll(/<a\b[^>]*href="([^"]+)"/g)) {
+      if (href.startsWith('#')) assert.ok(ids.includes(decodeURIComponent(href.slice(1))), href);
+      else assert.match(href, /^(https:\/\/|mailto:)/);
     }
-  }
-  assert.doesNotMatch(html, /\son(?:click|submit|keydown|load|error)=/i);
-  const csp = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
-  assert.match(csp, /script-src 'self';/);
-  assert.match(csp, /connect-src 'none'/);
-  assert.doesNotMatch(csp, /script-src[^;]*(?:unsafe-inline|unsafe-eval)/);
-  assert.doesNotMatch(html, /(?:src|href)="https:\/\/(?:cdnjs|cdn\.jsdelivr|fonts\.)/);
-  const icons = [...html.matchAll(/<img src="\.\/(assets\/icons\/[^\"]+\.svg)"[^>]*>/g)];
-  assert.equal(icons.length, 4);
-  for (const match of icons) {
-    const icon = fs.readFileSync(path.join(root, match[1]), 'utf8');
-    assert.match(icon, /<svg/);
-    assert.doesNotMatch(icon, /<script|foreignObject|onload=|href=/i);
-    assert.match(match[0], /alt=""/);
-  }
-});
-test('feedback does not include query strings or fragments', () => {
-  const state = setup({ missingThree: true });
-  state.context.orvantroSubmitFeedback({ product: 'test', rating: 'ok', email: 'a@example.com', body: 'hello & bye' });
-  const target = new URL(state.context.location.href);
-  assert.equal(target.protocol, 'mailto:');
-  assert.equal(target.pathname, 'orvantro@gmail.com');
-  assert.ok(target.searchParams.get('body').includes('hello & bye'));
-  assert.equal(target.searchParams.get('body').includes('token=secret'), false);
-  assert.equal(target.searchParams.get('body').includes('#private'), false);
-});
-test('direct known anchors bypass intro and focus their accessible section', () => {
-  for (const id of ['main-content', 'ventures', 'premium', 'feedback', 'roadmap', 'community', 'contact']) {
-    const state = setup({ hash: '#' + id, loading: true });
-    assertRevealed(state);
-    assert.equal(state.ids.get(id).focused, true);
-    assert.equal(state.ids.get(id).attrs.tabindex, '-1');
-    assert.equal(state.ids.get(id).scrollOptions.block, 'start');
-    assert.equal(state.stats.constructions, 0);
-    state.context.dispatch('load');
-    assert.equal(state.stats.constructions, 0);
-  }
-});
-test('encoded valid anchors resolve while malformed or unknown fragments cannot throw', () => {
-  assert.equal(setup({ hash: '#%63ommunity' }).ids.get('community').focused, true);
-  for (const hash of ['#%E0%A4%A', '#%FF', '#__proto__', '#%3Cscript%3E']) {
-    const state = setup({ hash });
-    assert.equal(state.document.documentElement.classList.contains('intro-active'), true);
-    assert.equal(state.ids.get('community').focused, false);
-  }
-});
-test('hash navigation reveals section from an active intro', () => {
-  const state = setup();
-  state.context.location.hash = '#contact';
-  state.context.dispatch('hashchange');
-  assertRevealed(state);
-  assert.equal(state.ids.get('contact').focused, true);
-  assert.equal(state.frames.size, 0);
-});
-test('hash navigation during warp cancels delayed focus takeover', () => {
-  const state = setup();
-  state.ids.get('intro-ui').dispatch('click');
-  state.context.location.hash = '#feedback';
-  state.context.dispatch('hashchange');
-  state.ids.get('main-content').focused = false;
-  state.flushTimers();
-  assert.equal(state.ids.get('feedback').focused, true);
-  assert.equal(state.ids.get('main-content').focused, false);
-  assert.equal(state.stats.rendererDispose, 1);
-});
-test('direct anchors are reapplied after load and browser page restoration', () => {
-  const state = setup({ hash: '#community', loading: true });
-  const target = state.ids.get('community');
-  const initialCount = target.scrollCount;
-  state.context.dispatch('load');
-  state.context.dispatch('pageshow');
-  target.scrollOptions = null; // Simulate native restoration replacing the early scroll.
-  state.flushFrames();
-  assert.equal(target.scrollOptions, null);
-  state.flushFrames();
-  assert.equal(target.scrollOptions.behavior, 'instant');
-  assert.equal(target.scrollOptions.block, 'start');
-  assert.ok(target.scrollCount > initialCount);
-  assert.equal(state.stats.constructions, 0);
-  assert.equal(state.frames.size, 0);
-});
-test('deferred restoration follows the latest valid fragment and ignores invalid fragments', () => {
-  const state = setup({ hash: '#community', loading: true });
-  state.context.dispatch('pageshow');
-  state.context.location.hash = '#contact';
-  state.flushFrames();
-  state.flushFrames();
-  assert.equal(state.ids.get('contact').scrollOptions.behavior, 'instant');
-  const count = state.ids.get('community').scrollCount;
-  state.context.dispatch('pageshow');
-  state.context.location.hash = '#%FF';
-  state.flushFrames();
-  state.flushFrames();
-  assert.equal(state.ids.get('community').scrollCount, count);
-  assert.equal(state.frames.size, 0);
-});
-console.log(`${passed} homepage regression checks passed.`);
+    for (const id of ['main-content', 'ventures', 'premium', 'feedback', 'roadmap', 'community', 'contact', 'data-settings', 'central-allow', 'central-deny']) assert.ok(ids.includes(id), id);
+  });
+  await test('beta, premium, social and contact targets retain their canonical addresses', () => {
+    const links = [...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>/g)];
+    const hrefs = links.map(m => m[1]);
+    for (const url of ['https://judanvy8-netizen.github.io/marginkit-pro-beta/', 'https://judanvy8-netizen.github.io/marginkit-pro-beta/#premium', 'https://judanvy8-netizen.github.io/orvantro-insights/', 'https://www.youtube.com/@ORVANTRO', 'https://x.com/orvantro', 'https://discord.gg/zu9W5uWmrr', 'https://www.instagram.com/orvantro', 'mailto:orvantro@gmail.com']) assert.ok(hrefs.includes(url), url);
+    for (const link of links) if (attributes(link[0]).target === '_blank') {
+      const rel = attributes(link[0]).rel?.split(/\s+/); assert.ok(rel?.includes('noopener') && rel.includes('noreferrer'));
+    }
+  });
+  await test('scripts and assets stay local while CSP permits only the existing collection origin', () => {
+    const csp = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
+    assert.match(csp, /script-src 'self';/); assert.doesNotMatch(csp, /script-src[^;]*(?:unsafe-inline|unsafe-eval)/);
+    const connect = csp.match(/connect-src ([^;]+)/)[1].trim().split(/\s+/);
+    assert.deepEqual(connect, ["'self'", 'https://orvantro-insights-api.orvantro.workers.dev']);
+    for (const [, raw, body] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) { const attrs = attributes(raw); assert.ok(attrs.src?.startsWith('./')); assert.equal(body.trim(), ''); }
+    assert.doesNotMatch(html, /\son(?:click|submit|keydown|load|error)=/i);
+  });
+  await test('feedback retains deliberate mail composition and excludes private URL parts', () => {
+    assert.ok(html.includes('id="feedback-form"'));
+    for (const name of ['product', 'rating', 'email', 'body']) assert.ok(html.includes('name="' + name + '"'));
+    const state = browser(); state.run('site.js');
+    state.context.orvantroSubmitFeedback({ product: 'MarginKit', rating: '만족', email: 'user@example.com', body: '한국어 & newline\nsecond line' });
+    const target = new URL(state.context.location.href);
+    assert.equal(target.protocol, 'mailto:'); assert.equal(target.pathname, 'orvantro@gmail.com');
+    assert.ok(target.searchParams.get('body').includes('한국어 & newline\nsecond line'));
+    assert.equal(target.searchParams.get('body').includes('secret=private'), false);
+    assert.equal(state.requests.length, 0);
+  });
+  await test('homepage scripts do not load local diagnostics or mutate existing records before central consent', async () => {
+    const files = [...html.matchAll(/<script\b([^>]*)>/g)].map(match => attributes(match[1]).src?.replace(/^\.\//, '').split('?')[0]);
+    assert.ok(files.length > 0);
+    assert.ok(!files.includes('orvantro-analytics.js'));
+    // Previously enabled local history, including old records, must remain untouched
+    const priorLocal = {
+      orvantro_local_analytics_enabled_v2: 'yes',
+      orvantro_local_analytics_v2: JSON.stringify([{ t: 1, site: 'orvantro', type: 'orvantro_pageview', path: '/' }]),
+      unrelated: 'retained'
+    };
+    for (const local of [{}, priorLocal]) {
+      const session = { unrelated: 'retained' }, state = browser({ local, session });
+      // Run the actual homepage script list at defer readiness, including UI scripts
+      state.document.readyState = 'interactive';
+      files.forEach(file => state.run(file));
+      state.boot(); state.flushFrames(); await settle();
+      assert.equal(state.context.OrvantroAnalytics, undefined, 'local diagnostics must not auto-load');
+      assert.equal(state.ids.has('analytics-toggle'), false);
+      assert.equal(state.ids.has('analytics-status'), false);
+      assert.equal(state.context.OrvantroCentral.getStatus().status, 'needs-consent');
+      assert.equal(state.requests.length, 0);
+      assert.deepEqual(Object.fromEntries(state.context.localStorage.map), local);
+      assert.deepEqual(Object.fromEntries(state.context.sessionStorage.map), session);
+      assert.deepEqual(state.context.localStorage.mutations, [], 'no initialization writes or deletion');
+      assert.deepEqual(state.context.sessionStorage.mutations, []);
+    }
+  });
+  await test('both independent analytics modes are off by default with no network request', async () => {
+    const state = analytics(); await settle();
+    assert.equal(state.context.OrvantroAnalytics.isEnabled(), false);
+    assert.equal(state.context.OrvantroCentral.getStatus().consent, false);
+    assert.equal(state.context.OrvantroCentral.getStatus().configured, true);
+    assert.equal(state.context.OrvantroCentral.getStatus().status, 'needs-consent');
+    assert.equal(state.requests.length, 0); assert.equal(state.context.localStorage.map.size, 0);
+  });
+  await test('local consent records once without enabling central collection or preserving URL data', () => {
+    const state = analytics(), api = state.context.OrvantroAnalytics;
+    assert.equal(api.setEnabled(true), true); api.setEnabled(true); api.track('pageview', { secret: 'private' });
+    const rows = JSON.parse(JSON.stringify(api.getRing())); assert.equal(rows.length, 1);
+    assert.deepEqual(Object.keys(rows[0]).sort(), ['path', 'site', 't', 'type']);
+    assert.equal(rows[0].path, '/'); assert.equal(rows[0].site, 'orvantro');
+    assert.equal(state.context.OrvantroCentral.getStatus().consent, false); assert.equal(state.requests.length, 0);
+    api.setEnabled(false); assert.equal(api.track('pageview'), false);
+  });
+  await test('local records enforce retention and strip unexpected fields', () => {
+    const now = Date.now();
+    const records = [
+      { t: now - 31 * 86400000, site: 'orvantro', type: 'orvantro_pageview' },
+      { t: now, site: 'unknown', type: 'orvantro_pageview' },
+      { t: now + 60000, site: 'orvantro', type: 'orvantro_pageview' },
+      { t: now, site: 'orvantro', type: 'orvantro_pageview', path: '/secret?token=private', extra: 'private' }
+    ];
+    const state = analytics({ local: { orvantro_local_analytics_v2: JSON.stringify(records) } });
+    const rows = JSON.parse(JSON.stringify(state.context.OrvantroAnalytics.getRing()));
+    assert.equal(rows.length, 1); assert.deepEqual(rows[0], { t: now, type: 'orvantro_pageview', site: 'orvantro', path: '/' });
+    assert.equal(state.requests.length, 0);
+  });
+  await test('central consent sends only the minimized payload once and withdrawal clears its session', async () => {
+    const state = analytics(), api = state.context.OrvantroCentral;
+    api.setConsent(true); await settle();
+    assert.equal(state.requests.length, 1); const request = state.requests[0], payload = JSON.parse(request.body);
+    assert.equal(request.url, 'https://orvantro-insights-api.orvantro.workers.dev/collect');
+    assert.deepEqual(Object.keys(payload).sort(), ['eventId', 'sessionId', 'site', 'v']);
+    assert.equal(payload.site, 'orvantro'); assert.equal(payload.v, 2); assert.equal(request.credentials, 'omit'); assert.equal(request.referrerPolicy, 'no-referrer');
+    assert.equal(api.getStatus().status, 'sent');
+    api.setConsent(true); state.document.dispatch('visibilitychange'); await settle(); assert.equal(state.requests.length, 1);
+    assert.equal(state.context.OrvantroAnalytics.isEnabled(), false);
+    api.setConsent(false); assert.equal(api.getStatus().consent, false);
+    assert.equal(state.context.sessionStorage.getItem('orvantro_central_tab_session_v2:orvantro'), null);
+    state.document.dispatch('visibilitychange'); await settle(); assert.equal(state.requests.length, 1);
+  });
+  await test('browser privacy signals override existing central consent', async () => {
+    for (const navigator of [{ globalPrivacyControl: true }, { doNotTrack: '1' }]) {
+      const state = analytics({ navigator, local: { 'orvantro_central_consent_v2:orvantro': 'yes' } });
+      state.context.OrvantroCentral.setConsent(true); await settle();
+      assert.equal(state.context.OrvantroCentral.getStatus().status, 'privacy-preference'); assert.equal(state.requests.length, 0);
+    }
+  });
+  await test('failed collection does not automatically retry on visibility changes', async () => {
+    const state = analytics({ networkError: true }); state.context.OrvantroCentral.setConsent(true); await settle();
+    assert.equal(state.context.OrvantroCentral.getStatus().status, 'error');
+    state.document.dispatch('visibilitychange'); state.document.dispatch('prerenderingchange'); await settle();
+    assert.equal(state.requests.length, 1);
+  });
+  await test('unavailable browser storage keeps both analytics modes inactive', async () => {
+    const state = analytics({ blockedStorage: true });
+    assert.equal(state.context.OrvantroAnalytics.setEnabled(true), false);
+    assert.equal(state.context.OrvantroCentral.setConsent(true), false); await settle();
+    assert.equal(state.context.OrvantroCentral.getStatus().consent, false); assert.equal(state.requests.length, 0);
+  });
+  console.log(`${passed} functional regression checks passed (Node VM and source checks; no live analytics requests)`);
+})().catch(error => { console.error(error); process.exitCode = 1; });

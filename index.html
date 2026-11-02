@@ -5,231 +5,173 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://orvantro-insights-api.orvantro.workers.dev; object-src 'none'; base-uri 'none'; form-action mailto:; upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ORVANTRO — 소프트웨어·게임·보안 기술. 웹 제품 베타를 운영하며 게임과 보안 기술로 개발 영역을 넓혀갑니다. Software, games and security technology.">
+  <meta name="description" content="ORVANTRO 소프트웨어·게임·보안 기술 | 웹 제품 베타와 새로운 개발 방향">
   <meta name="theme-color" content="#05070d">
   <meta property="og:title" content="ORVANTRO">
-  <meta property="og:description" content="Software · Games · Security. Explore the MarginKit beta and our development direction. Security products are a future direction.">
+  <meta property="og:description" content="Software · Games · Security | Explore our web product betas and development direction">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://orvantro.com/">
   <link rel="canonical" href="https://orvantro.com/">
   <title>ORVANTRO</title>
-  <link rel="stylesheet" href="./site.css?v=20261031-1">
-  <link rel="stylesheet" href="./visual.css?v=20261101-clear-card-copy">
+  <link rel="stylesheet" href="./site.css?v=20261102-release1">
+  <link rel="stylesheet" href="./visual.css?v=20261102-release1">
 </head>
 <body>
-  <a class="skip" href="#main-content">본문으로 건너뛰기<span class="translation" lang="en">Skip to content</span></a>
-  <canvas id="webgl-canvas" aria-hidden="true"></canvas>
-
-  <div id="intro-ui" role="button" tabindex="0" aria-label="ORVANTRO 스튜디오 입장 / Enter ORVANTRO">
-    <div class="intro-brand">ORVANTRO</div>
-    <p class="intro-prompt">CLICK TO ENTER</p>
+<a class="skip" href="#main-content">본문으로 건너뛰기<span class="translation" lang="en">Skip to content</span></a>
+<div class="scroll-progress" aria-hidden="true"></div>
+<header class="topbar">
+  <a class="wordmark" href="#main-content" aria-label="ORVANTRO home"><span class="brand-mark" aria-hidden="true"></span>ORVANTRO</a>
+  <nav id="main-nav" class="nav" aria-label="주요 메뉴" data-en-aria-label="Main navigation">
+    <a href="#ventures">Work</a><a href="#roadmap">Horizons</a><a href="#community">Connect</a>
+  </nav>
+  <div class="header-controls">
+    <div class="language-switch" aria-label="언어 선택" data-en-aria-label="Choose language"><button type="button" data-language-choice="ko" aria-pressed="true" aria-label="한국어">KR</button><button type="button" data-language-choice="en" aria-pressed="false" aria-label="English">EN</button></div>
+    <button id="menu-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="메뉴" data-en-aria-label="Menu"><span></span><span></span></button>
   </div>
+</header>
+<main id="main-content" tabindex="-1">
+  <section class="hero" data-hero-stage="0" aria-labelledby="hero-title">
+    <div class="hero-inner">
+      <div class="hero-eyebrow"><span class="small-line" aria-hidden="true"></span>SOFTWARE &nbsp; GAMES &nbsp; SECURITY</div>
+      <div class="hero-composition">
+        <div class="hero-copy">
+          <h1 id="hero-title"><span>CODE TO CREATE</span><span class="next-word">CODE TO PROTECT</span></h1>
+          <p class="hero-description">웹서비스와 게임을 만들고<br>보안 기술로 확장하는 ORVANTRO<span class="translation" lang="en">Creating web services and games<br>Expanding into security</span></p>
+          <a class="hero-cta" href="#ventures"><span>제품 살펴보기<span class="translation" lang="en">Explore the products</span></span><span class="circle-arrow" aria-hidden="true">↗</span></a>
+        </div>
+        <div class="core-visual">
+          <div class="hero-art" aria-hidden="true"><svg viewBox="0 0 600 480" fill="none"><defs><linearGradient id="brand-static-metal" x1="120" y1="80" x2="430" y2="410" gradientUnits="userSpaceOnUse"><stop stop-color="#d9f8ff"/><stop offset=".48" stop-color="#78c4d9"/><stop offset="1" stop-color="#225571"/></linearGradient></defs><path d="M204 70H396L470 144V336L396 410H204L130 336V144ZM221 126L186 161V319L221 354H379L414 319V161L379 126Z" fill="url(#brand-static-metal)" fill-rule="evenodd"/><path d="M204 70H396L470 144M130 336L204 410H396" stroke="#d4f6ff" stroke-width="2"/><text x="300" y="248" text-anchor="middle" font-family="Arial,sans-serif" font-size="23" font-weight="600" letter-spacing="3" fill="#d5f0f8">ORVANTRO</text></svg></div>
+          <canvas id="hero-canvas" aria-hidden="true"></canvas>
+          <div class="brand-motion-stages" aria-hidden="true"><span data-stage="0">ORVANTRO</span><span data-stage="1">SOFTWARE</span><span data-stage="2">GAMES</span><span data-stage="3">SECURITY</span></div>
 
-  <main id="main-content" tabindex="-1">
+        </div>
+      </div>
+      <div class="hero-footnote"><span>ORVANTRO</span><span></span><a href="#ventures" class="scroll-cue">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
+    </div>
+    <button id="motion-toggle" type="button" aria-pressed="false" hidden><span class="motion-icon" aria-hidden="true"></span><span class="motion-label">움직임 멈춤</span></button>
+  </section>
+  <div class="work-rail">
+    <a href="#ventures" data-open-product="marginkit"><span class="rail-number">01</span><span><strong>MarginKit</strong><small>정산 원가 손익 분석<span class="translation" lang="en">Settlements costs and margins</span></small></span><span class="rail-state">BETA <i aria-hidden="true">↗</i></span></a>
+    <a href="#ventures" data-open-product="insights"><span class="rail-number">02</span><span><strong>Insights</strong><small>사이트와 SNS 운영 현황<span class="translation" lang="en">Website and social operations</span></small></span><span class="rail-state">OPERATOR <i aria-hidden="true">↗</i></span></a>
+    <a href="#roadmap"><span class="rail-number">03</span><span><strong>New horizons</strong><small>게임과 보안으로<span class="translation" lang="en">Towards games and security</span></small></span><span class="rail-state muted">EXPLORING <i aria-hidden="true">↓</i></span></a>
+  </div>
+  <section id="ventures" class="work-section" tabindex="-1" aria-labelledby="work-heading">
     <div class="shell">
-      <header class="topbar">
-        <a class="wordmark" href="#main-content" aria-label="ORVANTRO home">ORVANTRO</a>
-        <nav class="nav" aria-label="주요 메뉴 / Main navigation">
-          <a href="#ventures">Work</a><a href="#roadmap">Direction</a><a href="#community">Community</a><a href="#contact">Contact ↗</a>
-        </nav>
-        <div class="language-switch" aria-label="언어 / Language"><button type="button" data-language-choice="ko" aria-pressed="true">KR</button><span>/</span><button type="button" data-language-choice="en" aria-pressed="false">EN</button></div>
-      </header>
-      <section class="hero" aria-label="브랜드 소개 / About ORVANTRO">
-        <div class="hero-heading">
-          <div class="section-kicker">INDEPENDENT DEVELOPMENT / ORVANTRO</div>
-          <h1>기술을 만들고,<br>가능성을 넓힙니다<span class="translation" lang="en">Building tools<br>Opening possibilities</span></h1>
-        </div>
-        <div class="hero-intro">
-          <div class="disciplines">Software · Games · Security</div>
-          <p>일에 쓰이는 소프트웨어, 몰입할 수 있는 게임,<br class="desktop-break"> 신뢰할 수 있는 시스템을 향해.<span class="translation" lang="en">Useful software. Immersive games. A foundation for systems people can trust.</span></p>
-          <p class="hero-scope">웹 제품의 베타를 운영하며 게임과 보안 기술로<br class="desktop-break"> 개발 영역을 넓혀갑니다.<span class="translation" lang="en">Our web products are in beta. Games and security technology shape our next steps.</span></p>
-          <a class="text-cta" href="#ventures">만들고 있는 것 보기 <b aria-hidden="true">↗</b><span class="translation" lang="en">Explore our work ↗</span></a>
-        </div>
-      </section>
+      <div class="section-heading" data-reveal>
+        <div><div class="section-kicker">OUR PRODUCTS</div><h2 id="work-heading" class="section-title">판매부터<br>서비스 운영까지<span class="translation" lang="en">From selling<br>to service operations</span></h2></div>
+        <p class="section-lead">판매자를 위한 MarginKit<br>ORVANTRO 운영을 위한 Insights<span class="translation" lang="en">MarginKit for sellers<br>Insights for ORVANTRO operations</span></p>
+      </div>
+      <div class="product-tabs" aria-label="제품 선택" data-en-aria-label="Choose a product">
+        <a id="tab-marginkit" href="#panel-marginkit" data-product="marginkit"><span>01</span> MarginKit <small>SELLER WORKSPACE</small><i aria-hidden="true">↗</i></a>
+        <a id="tab-insights" href="#panel-insights" data-product="insights"><span>02</span> Insights <small>OPERATIONS DASHBOARD</small><i aria-hidden="true">↗</i></a>
+      </div>
 
-      <section class="development-plate" aria-label="세 개발 영역 / Three areas of development">
-        <article class="plate-software">
-          <div class="plate-index"><span>01 / SOFTWARE</span><span>PUBLIC BETA</span></div>
-          <h2>Profit at a glance</h2>
-          <div class="ledger-label">MARGINKIT <span>예시 계산 / DEMO</span></div>
-          <div class="ledger-value"><small>추정 총 순이익 / Estimated profit</small><strong>₩391,380</strong></div>
-          <div class="ledger-rule"></div>
-          <div class="ledger-detail"><span>원가가 등록된 5개 상품 기준<span class="translation" lang="en">Across 5 products with registered costs</span></span><span>19.5%<small>추정 마진율 / Estimated margin</small></span></div>
-          <div class="ledger-bars" aria-label="예시 상품 매출 비교: 72만원, 60만원, 45만원, 19만원, 12만원, 10만원. 표시용 근삿값입니다."><i style="--h:100%"></i><i style="--h:83.33%"></i><i style="--h:62.5%"></i><i style="--h:26.39%"></i><i style="--h:16.67%"></i><i style="--h:13.89%"></i><span class="bar-note">상품별 매출 / DEMO</span></div>
-          <p class="plate-caption">복잡한 정산을, 판단할 수 있는 숫자로<span class="translation" lang="en">From settlement files to decisions you can make.</span></p>
-        </article>
-        <article class="plate-games">
-          <div class="plate-index"><span>02 / GAMES</span><span>EXPLORATION</span></div>
-          <h2>Game world design</h2>
-          <svg class="world-diagram" viewBox="0 0 360 320" role="img" aria-labelledby="world-title"><title id="world-title">섬 형태 게임 공간의 지형과 이동 경로를 표현한 레벨 설계 도식. 실제 게임 화면이 아닙니다.</title>
-            <g fill="none" stroke="currentColor" stroke-width="1.2">
-              <path d="M32 139C36 103 62 104 84 90S95 47 132 40s47 19 68 21 38-15 65 8 8 42 27 61 39 33 33 63-40 29-59 49-27 39-65 34-46-23-72-15-56 16-73-12-3-48-13-69-15-23-11-41Z"/>
-              <path d="M53 143c2-30 34-30 50-53s10-31 33-31 39 22 63 21 38-13 52 6 8 37 28 56 29 29 24 48-37 27-51 43-22 28-49 22-47-22-75-13-43 12-52-8 0-37-11-57-14-16-12-34Z" opacity=".55"/>
-              <path d="M78 145c8-20 32-16 49-32s16-29 35-21 22 18 43 14 27 2 33 21 33 29 35 52-30 25-47 35-29 22-47 9-25-15-46-11-36 11-39-12 6-22-9-38-10-11-7-17Z" opacity=".45"/>
-              <path d="M131 129c16-18 37-13 51-1s41-8 48 11 6 31-11 42-23 9-43 0-40 8-47-8-8-32 2-44Z" opacity=".4"/>
-              <path d="M61 225 104 193 134 145 183 154 227 110 269 93" stroke-width="2.5" stroke-dasharray="3 6"/>
-              <path d="m183 154 35 60 51 16" stroke-width="1.5" stroke-dasharray="3 6"/>
-              <circle cx="61" cy="225" r="8" fill="#0b2d4c"/><path d="m58 221 7 4-7 4Z" fill="currentColor"/>
-              <circle cx="134" cy="145" r="6" fill="#0b2d4c"/><circle cx="218" cy="214" r="6" fill="#0b2d4c"/>
-              <path d="M269 93V55l23 8-23 9" stroke-width="1.8"/>
-              <path d="M23 34h17m-8-8v17M308 268h17m-8-8v17" opacity=".55"/>
-            </g>
-          </svg>
-          <p class="diagram-caption" lang="en">Game map concept</p>
-          <p class="plate-caption">탐험하고, 선택하고, 머무는 경험<span class="translation" lang="en">Experiences to explore, choose and return to.</span></p>
-        </article>
-        <article class="plate-security">
-          <div class="plate-index"><span>03 / SECURITY</span></div>
-          <h2>Security research</h2>
-          <svg class="trust-diagram" viewBox="0 0 210 220" role="img" aria-labelledby="trust-title"><title id="trust-title">입력, 권한 경계, 검토를 표현한 보안 연구 방향 도식. 출시된 보안 제품이 아닙니다.</title><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M35 40V18h140v22M35 180v22h140v-22"/><path d="M20 110h55m60 0h55"/><rect x="75" y="80" width="60" height="60"/><path d="m99 101 12 9-12 9"/><path d="M55 50h100v120H55Z" stroke-dasharray="3 6"/><circle cx="20" cy="110" r="4" fill="#101f36"/><circle cx="190" cy="110" r="4" fill="#101f36"/></g></svg>
-          <p class="security-state">RESEARCH DIRECTION</p>
-          <p class="plate-caption">경계를 세우고,<br>신뢰의 기반을 쌓는 일<span class="translation" lang="en">Defining boundaries.<br>Building the foundations of trust.</span></p>
-        </article>
-      </section>
-      <div class="plate-note">소프트웨어: 마진킷의 가상 예시 계산 · 게임 / 보안: 개발 방향을 표현한 도식<span class="translation" lang="en">Software: MarginKit demo calculation · Games / Security: conceptual diagrams of our development direction</span></div>
-      <div class="beta-banner" role="status"><span class="beta-pill">OPEN BETA</span><span>먼저 사용해 보고, 다음 버전을 함께 다듬어 주세요. 현재 결제·구독·거래는 제공하지 않습니다.<span class="translation" lang="en">Try the beta and help shape what comes next. Currently, payments, subscriptions and transactions are not available.</span></span><a href="#feedback">Feedback ↗</a></div>
+      <article id="panel-marginkit" class="product-panel" data-product-panel="marginkit" tabindex="-1" aria-labelledby="tab-marginkit">
+        <div class="product-story"><div class="product-eyebrow"><span class="live-dot" aria-hidden="true"></span>PUBLIC BETA</div><h3>매출에서<br><em>수익까지</em><span class="translation" lang="en">From revenue<br><em>to estimated profit</em></span></h3><p class="product-description">정산 파일과 원가를 연결해 상품별 추정 이익을 확인하고 판매와 광고의 가정을 비교합니다<span class="translation" lang="en">Connect settlements with product costs to understand estimated profit and compare sales and advertising scenarios</span></p><ol class="process-steps"><li><button type="button" class="process-step" data-step="0" aria-pressed="true" aria-controls="diagram-marginkit"><span class="step-number">01</span><span><strong>정산과 원가를 연결<span class="translation" lang="en">Connect settlements and costs</span></strong><small>파일 분석과 상품 원가 관리<span class="translation" lang="en">File analysis and product cost management</span></small></span><span class="step-arrow" aria-hidden="true">↗</span></button></li><li><button type="button" class="process-step" data-step="1" aria-pressed="false" aria-controls="diagram-marginkit"><span class="step-number">02</span><span><strong>수익의 구조를 확인<span class="translation" lang="en">Understand profit structure</span></strong><small>마진과 광고비 시뮬레이션<span class="translation" lang="en">Margin and advertising simulation</span></small></span><span class="step-arrow" aria-hidden="true">↗</span></button></li><li><button type="button" class="process-step" data-step="2" aria-pressed="false" aria-controls="diagram-marginkit"><span class="step-number">03</span><span><strong>다음 시나리오를 비교<span class="translation" lang="en">Compare the next scenario</span></strong><small>시나리오 비교와 월간 정산<span class="translation" lang="en">Scenario comparison and monthly settlement</span></small></span><span class="step-arrow" aria-hidden="true">↗</span></button></li></ol><a class="text-cta" href="https://judanvy8-netizen.github.io/marginkit-pro-beta/" target="_blank" rel="noopener noreferrer">MarginKit 베타 열기<span class="translation" lang="en">Open MarginKit beta</span><b aria-hidden="true">↗</b></a></div>
+        <div class="product-exhibit"><div class="exhibit-top"><span>MarginKit</span><span>기능 미리보기<span class="translation" lang="en">FEATURE PREVIEW</span></span></div><div id="diagram-marginkit" class="process-diagram product-screen" data-active-step="0"><div class="screen-chrome"><span class="screen-led" aria-hidden="true"></span><span>MarginKit</span><span class="screen-sample">기능 설명용 예시<span class="translation" lang="en">ILLUSTRATIVE PREVIEW</span></span></div><div class="screen-content"><div class="feature-view" data-feature="0"><div class="screen-heading"><span class="screen-index">01</span><h4>정산 파일과 상품 원가<span class="translation" lang="en">Settlements and product costs</span></h4></div><div class="file-flow"><div class="file-symbol" aria-hidden="true">CSV</div><div><strong>정산 파일 분석<span class="translation" lang="en">Settlement file analysis</span></strong><small>상품별 매출과 비용을 연결<span class="translation" lang="en">Match sales with product costs</span></small></div><span class="flow-arrow" aria-hidden="true">→</span></div><div class="screen-table"><div class="screen-table-head"><span>상품<span class="translation" lang="en">Product</span></span><span>원가<span class="translation" lang="en">Cost</span></span><span>연결 상태<span class="translation" lang="en">Match status</span></span></div><div class="screen-row"><span>상품 A<span class="translation" lang="en">Product A</span></span><span>₩12,000</span><strong>연결됨<span class="translation" lang="en">Matched</span></strong></div><div class="screen-row"><span>상품 B<span class="translation" lang="en">Product B</span></span><span>₩8,500</span><strong>연결됨<span class="translation" lang="en">Matched</span></strong></div><div class="screen-row"><span>상품 C<span class="translation" lang="en">Product C</span></span><span>—</span><strong>원가 확인<span class="translation" lang="en">Review cost</span></strong></div></div><div class="screen-bottom-note">누락된 원가를 확인한 뒤 손익을 분석<span class="translation" lang="en">Review missing costs before analysing profit</span></div></div><div class="feature-view" data-feature="1"><div class="screen-heading"><span class="screen-index">02</span><h4>상품별 추정 손익<span class="translation" lang="en">Estimated product profit</span></h4></div><div class="sample-chip">계산 예시<span class="translation" lang="en">Illustrative calculation</span></div><div class="profit-number"><span>추정 이익<span class="translation" lang="en">Estimated profit</span></span><strong>₩19,000</strong></div><div class="profit-stack" aria-hidden="true"><i style="--portion:55"></i><i style="--portion:26"></i><i style="--portion:19"></i></div><div class="profit-legend"><span>매출 100,000<span class="translation" lang="en">Revenue 100,000</span></span><span>원가 55,000<span class="translation" lang="en">Cost 55,000</span></span><span>기타 비용 26,000<span class="translation" lang="en">Other costs 26,000</span></span></div><div class="mini-metrics"><div><span>추정 이익률<span class="translation" lang="en">Estimated margin</span></span><strong>19<span>%</span></strong></div><div><span>분석 기준<span class="translation" lang="en">Basis</span></span><strong class="metric-text">입력한 원가<span class="translation" lang="en">Entered costs</span></strong></div></div></div><div class="feature-view" data-feature="2"><div class="screen-heading"><span class="screen-index">03</span><h4>조건별 시나리오 비교<span class="translation" lang="en">Compare selling scenarios</span></h4></div><div class="comparison"><div><small>기준 시나리오<span class="translation" lang="en">Baseline</span></small><strong>₩19,000</strong><span>예시 추정 이익<span class="translation" lang="en">Illustrative profit</span></span><i style="--bar-size:55%"></i></div><div><small>변경 시나리오<span class="translation" lang="en">Alternative</span></small><strong>₩24,000</strong><span>예시 추정 이익<span class="translation" lang="en">Illustrative profit</span></span><i style="--bar-size:74%"></i></div></div><div class="scenario-tags"><span>판매가<span class="translation" lang="en">Selling price</span></span><span>수수료<span class="translation" lang="en">Fees</span></span><span>광고비<span class="translation" lang="en">Ad spend</span></span></div><div class="screen-bottom-note">가정을 바꿔 비교하고 월간 정산으로 확인<span class="translation" lang="en">Compare assumptions and review monthly settlements</span></div></div></div></div><p class="diagram-caption">항목을 선택해 기능을 살펴보세요<span class="translation" lang="en">Select a feature to explore</span></p></div>
+        <p class="product-boundary"><span class="boundary-icon" aria-hidden="true"></span>정산과 원가 파일은 브라우저에서 처리<br>팀 시나리오는 별도 로그인 작업공간에 직접 저장<span class="translation" lang="en">Settlement and cost files are processed in your browser<br>Team scenarios are explicitly saved in a separate signed-in workspace</span></p>
+      </article>
 
-      <section id="ventures">
-        <div class="section-kicker">Ventures</div>
-        <h2 class="section-title">작동하는 것부터, 하나씩<span class="translation" lang="en">One working product at a time</span></h2>
-        <p class="section-lead">소프트웨어는 실제로 사용해 볼 수 있는 베타로 공개합니다. 제품마다 현재 제공하는 범위를 확인해 주세요.</p>
-        <p class="translation" lang="en">Explore the software currently available in beta, with the scope of each product clearly stated.</p>
+      <article id="panel-insights" class="product-panel" data-product-panel="insights" tabindex="-1" aria-labelledby="tab-insights">
+        <div class="product-story"><div class="product-eyebrow"><span class="live-dot" aria-hidden="true"></span>OPERATOR DASHBOARD</div><h3>방문부터<br><em>운영까지</em><span class="translation" lang="en">From visits<br><em>to operations</em></span></h3><p class="product-description">사이트 방문과 SNS 채널 현황을 출처별로 확인하고 전날 운영 요약과 이메일 예약을 관리합니다<span class="translation" lang="en">Review website visits and social channels by source and manage daily reports and scheduled emails</span></p><ol class="process-steps"><li><button type="button" class="process-step" data-step="0" aria-pressed="true" aria-controls="diagram-insights"><span class="step-number">01</span><span><strong>사이트 방문 확인<span class="translation" lang="en">Website activity</span></strong><small>기간별 조회와 세션 및 국가 기기 분류<span class="translation" lang="en">Views sessions country and device breakdowns</span></small></span><span class="step-arrow" aria-hidden="true">↗</span></button></li><li><button type="button" class="process-step" data-step="1" aria-pressed="false" aria-controls="diagram-insights"><span class="step-number">02</span><span><strong>SNS 채널 현황<span class="translation" lang="en">Social channels</span></strong><small>채널 지표와 마지막 수집 상태<span class="translation" lang="en">Channel metrics and latest collection status</span></small></span><span class="step-arrow" aria-hidden="true">↗</span></button></li><li><button type="button" class="process-step" data-step="2" aria-pressed="false" aria-controls="diagram-insights"><span class="step-number">03</span><span><strong>일일 운영 요약<span class="translation" lang="en">Daily operating report</span></strong><small>전날 리포트와 이메일 예약 관리<span class="translation" lang="en">Previous day report and scheduled emails</span></small></span><span class="step-arrow" aria-hidden="true">↗</span></button></li></ol><a class="text-cta" href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">Insights 살펴보기<span class="translation" lang="en">Explore Insights</span><b aria-hidden="true">↗</b></a><a class="operator-link" href="https://orvantro-insights-api.orvantro.workers.dev/admin/" target="_blank" rel="noopener noreferrer">운영자 로그인<span class="translation" lang="en">Operator login</span></a></div>
+        <div class="product-exhibit"><div class="exhibit-top"><span>Insights</span><span>기능 미리보기<span class="translation" lang="en">FEATURE PREVIEW</span></span></div><div id="diagram-insights" class="process-diagram product-screen" data-active-step="0"><div class="screen-chrome"><span class="screen-led" aria-hidden="true"></span><span>Insights</span><span class="screen-sample">기능 설명용 예시<span class="translation" lang="en">ILLUSTRATIVE PREVIEW</span></span></div><div class="screen-content"><div class="feature-view" data-feature="0"><div class="screen-heading"><span class="screen-index">01</span><h4>사이트별 방문 현황<span class="translation" lang="en">Website activity</span></h4></div><div class="site-pills"><strong>ORVANTRO</strong><span>MarginKit</span><span>Insights</span></div><div class="screen-chart-heading"><span>페이지 조회와 일별 세션<span class="translation" lang="en">Page views and daily sessions</span></span><span>예시 차트<span class="translation" lang="en">Illustrative chart</span></span></div><svg class="screen-chart" viewBox="0 0 460 200" role="img" aria-label="일별 흐름 예시" data-en-aria-label="Illustrative daily trend"><path d="M20 40H440M20 85H440M20 130H440M20 180H440" class="chart-grid"/><rect class="chart-bar" x="28" y="134" width="15" height="46" rx="2" style="--bar-index:0"/><rect class="chart-bar" x="58" y="118" width="15" height="62" rx="2" style="--bar-index:1"/><rect class="chart-bar" x="88" y="127" width="15" height="53" rx="2" style="--bar-index:2"/><rect class="chart-bar" x="118" y="94" width="15" height="86" rx="2" style="--bar-index:3"/><rect class="chart-bar" x="148" y="105" width="15" height="75" rx="2" style="--bar-index:4"/><rect class="chart-bar" x="178" y="77" width="15" height="103" rx="2" style="--bar-index:5"/><rect class="chart-bar" x="208" y="98" width="15" height="82" rx="2" style="--bar-index:6"/><rect class="chart-bar" x="238" y="51" width="15" height="129" rx="2" style="--bar-index:7"/><rect class="chart-bar" x="268" y="74" width="15" height="106" rx="2" style="--bar-index:8"/><rect class="chart-bar" x="298" y="56" width="15" height="124" rx="2" style="--bar-index:9"/><rect class="chart-bar" x="328" y="31" width="15" height="149" rx="2" style="--bar-index:10"/><rect class="chart-bar" x="358" y="42" width="15" height="138" rx="2" style="--bar-index:11"/><rect class="chart-bar" x="388" y="14" width="15" height="166" rx="2" style="--bar-index:12"/><rect class="chart-bar" x="418" y="27" width="15" height="153" rx="2" style="--bar-index:13"/><path class="chart-trend" pathLength="1" d="M36 130L66 115L96 126L126 98L156 105L186 82L216 94L246 64L276 80L306 64L336 42L366 52L396 24L426 32"/></svg><div class="scenario-tags"><span>국가<span class="translation" lang="en">Country</span></span><span>기기<span class="translation" lang="en">Device</span></span><span>운영체제<span class="translation" lang="en">OS</span></span><span>브라우저<span class="translation" lang="en">Browser</span></span></div></div><div class="feature-view" data-feature="1"><div class="screen-heading"><span class="screen-index">02</span><h4>SNS 채널 현황<span class="translation" lang="en">Social channel overview</span></h4></div><div class="channel-list"><div><span class="channel-symbol" aria-hidden="true">▶</span><div><strong>YouTube</strong><small>구독자와 조회수<span class="translation" lang="en">Subscribers and views</span></small></div><span class="channel-status">연결 후 표시<span class="translation" lang="en">After connection</span></span></div><div><span class="channel-symbol" aria-hidden="true">◎</span><div><strong>Instagram</strong><small>팔로워와 게시물<span class="translation" lang="en">Followers and posts</span></small></div><span class="channel-status">연결 후 표시<span class="translation" lang="en">After connection</span></span></div><div><span class="channel-symbol" aria-hidden="true">D</span><div><strong>Discord</strong><small>전체 인원과 온라인 인원<span class="translation" lang="en">Members and online users</span></small></div><span class="channel-status">연결 후 표시<span class="translation" lang="en">After connection</span></span></div><div><span class="channel-symbol" aria-hidden="true">X</span><div><strong>X</strong><small>팔로워와 게시물<span class="translation" lang="en">Followers and posts</span></small></div><span class="channel-status">승인 후 연결<span class="translation" lang="en">Approval required</span></span></div></div><div class="collection-line"><span class="scan-dot" aria-hidden="true"></span>채널별 지표와 마지막 수집 상태 확인<span class="translation" lang="en">Channel metrics and latest collection status</span></div><div class="screen-bottom-note">사이트 방문과 SNS 수치는 출처별로 구분<span class="translation" lang="en">Website and social metrics stay separate</span></div></div><div class="feature-view" data-feature="2"><div class="screen-heading"><span class="screen-index">03</span><h4>전날 운영 요약<span class="translation" lang="en">Previous day report</span></h4></div><div class="report-sheet"><div class="report-letterhead"><span class="brand-mark" aria-hidden="true"></span><strong>ORVANTRO</strong><span>DAILY REPORT</span></div><h5>전날의 운영을 한 번에<span class="translation" lang="en">The previous day at a glance</span></h5><div class="report-item"><span>01</span><span>사이트별 방문 요약<span class="translation" lang="en">Website activity summary</span></span><i></i></div><div class="report-item"><span>02</span><span>SNS 채널별 현황<span class="translation" lang="en">Social channel overview</span></span><i></i></div><div class="report-item"><span>03</span><span>연결 상태와 확인할 항목<span class="translation" lang="en">Connection status and items to review</span></span><i></i></div></div><div class="screen-bottom-note">운영자 화면에서 리포트와 이메일 예약 관리<span class="translation" lang="en">Manage reports and scheduled emails in the operator dashboard</span></div></div></div></div><p class="diagram-caption">항목을 선택해 기능을 살펴보세요<span class="translation" lang="en">Select a feature to explore</span></p></div>
+        <p class="product-boundary"><span class="boundary-icon" aria-hidden="true"></span>공개 안내와 운영자 화면을 구분<br>상세 운영 데이터는 인증된 운영자만 확인<span class="translation" lang="en">Public information and operator access are separate<br>Detailed operating data is available to authenticated operators</span></p>
+      </article>
 
-        <div class="venture-list">
-          <a class="venture" href="https://judanvy8-netizen.github.io/marginkit-pro-beta/" target="_blank" rel="noopener noreferrer">
-            <div><div class="project-number">01 / SOFTWARE</div><h3>MarginKit</h3><p>정산 파일 분석부터 수익 시뮬레이션, 광고비 회수와 월간 정산까지. 셀러에게 필요한 계산을 한곳에 모았습니다.<span class="translation" lang="en">Settlement-file analysis, profit simulation, advertising break-even and monthly settlement in one place.</span></p></div>
-            <div class="venture-meta">정산 분석 · 수익 계산 · 월간 정산<br>파일과 계산은 내 브라우저에서 처리<span class="translation" lang="en">Files and calculations stay in your browser</span></div>
-            <div class="pill">Open beta ↗</div>
-            <figure class="project-visual"><img src="./assets/marginkit-preview.png" alt="MarginKit 베타: 가상 예시 데이터의 수익 지표와 상품별 매출 차트" loading="lazy" width="1142" height="557"><figcaption>렌더링한 베타 화면 · 가상 예시 데이터<span class="translation" lang="en">Rendered beta interface · fictional demo data</span></figcaption></figure>
-          </a>
-          <a class="venture" href="https://judanvy8-netizen.github.io/orvantro-insights/" target="_blank" rel="noopener noreferrer">
-            <div><div class="project-number">02 / SOFTWARE</div><h3>Insights</h3><p>실제 수집된 방문 통계는 운영자 대시보드에서 확인합니다 · 기기 내 진단 기록은 별도로 표시합니다<span class="translation" lang="en">View measured visits in the operator dashboard · Device-local diagnostics stay separate</span></p></div>
-            <div class="venture-meta">실제 방문 집계 연결<br>운영자 로그인으로 확인<span class="translation" lang="en">Central analytics connected · Operator sign-in required</span></div>
-            <div class="pill">Open beta ↗</div>
-            <figure class="project-visual"><img src="./assets/insights-preview.png" alt="Insights 베타: 가상 샘플 지표와 관측·추정 구분 차트" loading="lazy" width="1344" height="480"><figcaption>렌더링한 베타 화면 · 가상 샘플 통계<span class="translation" lang="en">Rendered beta interface · fictional sample statistics</span></figcaption></figure>
-          </a>
-        </div>
-      </section>
-
-      <section id="premium">
+      <div class="beta-note"><span>MARGINKIT BETA</span><p>MarginKit은 현재 결제와 구독 없이 이용할 수 있습니다<span class="translation" lang="en">MarginKit is currently available without payments or subscriptions</span></p><a href="#feedback">피드백 남기기<span class="translation" lang="en">Share feedback</span> <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </section>
+  <section id="roadmap" class="horizons-section" tabindex="-1" aria-labelledby="direction-heading">
+    <div class="shell">
+      <div class="horizons-intro" data-reveal><div class="section-kicker">IN DEVELOPMENT</div><h2 class="section-title" id="direction-heading">소프트웨어에서<br><em>게임과 보안으로</em><span class="translation" lang="en">From software<br><em>to games and security</em></span></h2><p>Dino Trails는 게임 개발 방향<br>보안은 자체 시스템 검증부터 시작합니다<span class="translation" lang="en">Dino Trails is a game development direction<br>Security starts with testing our own systems</span></p></div>
+      <div class="horizon-list">
+        <article id="dino-trails" class="horizon-row" tabindex="-1" data-reveal><div class="horizon-kind">01 &nbsp; GAMES</div><div class="horizon-art terrain" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" aria-hidden="true" focusable="false"><defs><linearGradient id="terrain-depth" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1d5770"/><stop offset="1" stop-color="#0b1c2b"/></linearGradient><radialGradient id="terrain-light"><stop stop-color="#a4edf5" stop-opacity=".12"/><stop offset="1" stop-color="#a4edf5" stop-opacity="0"/></radialGradient></defs><ellipse cx="300" cy="304" rx="265" ry="84" fill="url(#terrain-light)"/><g class="terrain-volume" stroke="#a4edf5" stroke-opacity=".27" stroke-width=".8" stroke-linejoin="round"><path d="M546.0,220.0 L496.8,238.4 L496.8,265.4 L546.0,247.0Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M496.8,238.4 L447.6,263.8 L447.6,290.8 L496.8,265.4Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M447.6,263.8 L398.4,290.2 L398.4,317.2 L447.6,290.8Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M398.4,290.2 L349.2,309.6 L349.2,336.6 L398.4,317.2Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M349.2,309.6 L300.0,337.0 L300.0,364.0 L349.2,336.6Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M54.0,220.0 L103.2,240.4 L103.2,267.4 L54.0,247.0Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M103.2,240.4 L152.4,266.8 L152.4,293.8 L103.2,267.4Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M152.4,266.8 L201.6,285.2 L201.6,312.2 L152.4,293.8Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M201.6,285.2 L250.8,309.6 L250.8,336.6 L201.6,312.2Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><path d="M250.8,309.6 L300.0,337.0 L300.0,364.0 L250.8,336.6Z" fill="url(#terrain-depth)" stroke="#39758a" stroke-opacity=".3"/><polygon points="300,103 349.2,123.4 250.8,122.4" fill="#2b4e5c"/><polygon points="349.2,123.4 300,121.8 250.8,122.4" fill="#234251"/><polygon points="349.2,123.4 398.4,141.8 300,121.8" fill="#325968"/><polygon points="398.4,141.8 349.2,133.2 300,121.8" fill="#2c515f"/><polygon points="398.4,141.8 447.6,173.2 349.2,133.2" fill="#345c6b"/><polygon points="447.6,173.2 398.4,171.6 349.2,133.2" fill="#2a4d5c"/><polygon points="447.6,173.2 496.8,192.6 398.4,171.6" fill="#2f5564"/><polygon points="496.8,192.6 447.6,204 398.4,171.6" fill="#264655"/><polygon points="496.8,192.6 546,220 447.6,204" fill="#2d5261"/><polygon points="546,220 496.8,238.4 447.6,204" fill="#203e4c"/><polygon points="250.8,122.4 300,121.8 201.6,149.8" fill="#305665"/><polygon points="300,121.8 250.8,137.2 201.6,149.8" fill="#2a4d5b"/><polygon points="300,121.8 349.2,133.2 250.8,137.2" fill="#40707e"/><polygon points="349.2,133.2 300,104.6 250.8,137.2" fill="#41717f"/><polygon points="349.2,133.2 398.4,171.6 300,104.6" fill="#4c8290"/><polygon points="398.4,171.6 349.2,152 300,104.6" fill="#457785"/><polygon points="398.4,171.6 447.6,204 349.2,152" fill="#417180"/><polygon points="447.6,204 398.4,213.4 349.2,152" fill="#355e6d"/><polygon points="447.6,204 496.8,238.4 398.4,213.4" fill="#345d6c"/><polygon points="496.8,238.4 447.6,263.8 398.4,213.4" fill="#244452"/><polygon points="201.6,149.8 250.8,137.2 152.4,168.2" fill="#325a68"/><polygon points="250.8,137.2 201.6,173.6 152.4,168.2" fill="#2a4d5b"/><polygon points="250.8,137.2 300,104.6 201.6,173.6" fill="#4a808e"/><polygon points="300,104.6 250.8,155 201.6,173.6" fill="#437584"/><polygon points="300,104.6 349.2,152 250.8,155" fill="#5b9aa8"/><polygon points="349.2,152 300,198.4 250.8,155" fill="#437483"/><polygon points="349.2,152 398.4,213.4 300,198.4" fill="#497d8c"/><polygon points="398.4,213.4 349.2,246.8 300,198.4" fill="#315766"/><polygon points="398.4,213.4 447.6,263.8 349.2,246.8" fill="#355e6c"/><polygon points="447.6,263.8 398.4,290.2 349.2,246.8" fill="#213e4d"/><polygon points="152.4,168.2 201.6,173.6 103.2,192.6" fill="#305665"/><polygon points="201.6,173.6 152.4,202 103.2,192.6" fill="#264655"/><polygon points="201.6,173.6 250.8,155 152.4,202" fill="#40707f"/><polygon points="250.8,155 201.6,211.4 152.4,202" fill="#355e6d"/><polygon points="250.8,155 300,198.4 201.6,211.4" fill="#487d8b"/><polygon points="300,198.4 250.8,240.8 201.6,211.4" fill="#325a69"/><polygon points="300,198.4 349.2,246.8 250.8,240.8" fill="#3d6b7a"/><polygon points="349.2,246.8 300,278.2 250.8,240.8" fill="#284a59"/><polygon points="349.2,246.8 398.4,290.2 300,278.2" fill="#305665"/><polygon points="398.4,290.2 349.2,309.6 300,278.2" fill="#1f3c4b"/><polygon points="103.2,192.6 152.4,202 54,220" fill="#2e5362"/><polygon points="152.4,202 103.2,240.4 54,220" fill="#203e4c"/><polygon points="152.4,202 201.6,211.4 103.2,240.4" fill="#355e6c"/><polygon points="201.6,211.4 152.4,266.8 103.2,240.4" fill="#234251"/><polygon points="201.6,211.4 250.8,240.8 152.4,266.8" fill="#365f6e"/><polygon points="250.8,240.8 201.6,285.2 152.4,266.8" fill="#234150"/><polygon points="250.8,240.8 300,278.2 201.6,285.2" fill="#325a69"/><polygon points="300,278.2 250.8,309.6 201.6,285.2" fill="#203e4c"/><polygon points="300,278.2 349.2,309.6 250.8,309.6" fill="#2d5261"/><polygon points="349.2,309.6 300,337 250.8,309.6" fill="#1d3948"/></g><g class="terrain-path" fill="none" stroke="#a4edf5" stroke-linejoin="round" stroke-linecap="round"><polyline points="152.4,202 250.8,155 300,104.6 349.2,152 447.6,204" stroke-width="2.4"/><circle cx="152.4" cy="202.0" r="6" fill="#0b1c2b" stroke-width="1.5"/><circle cx="152.4" cy="202.0" r="2" fill="#a4edf5" stroke="none"/><circle cx="250.8" cy="155.0" r="6" fill="#0b1c2b" stroke-width="1.5"/><circle cx="250.8" cy="155.0" r="2" fill="#a4edf5" stroke="none"/><circle cx="300.0" cy="104.6" r="6" fill="#0b1c2b" stroke-width="1.5"/><circle cx="300.0" cy="104.6" r="2" fill="#a4edf5" stroke="none"/><circle cx="349.2" cy="152.0" r="6" fill="#0b1c2b" stroke-width="1.5"/><circle cx="349.2" cy="152.0" r="2" fill="#a4edf5" stroke="none"/><circle cx="447.6" cy="204.0" r="6" fill="#0b1c2b" stroke-width="1.5"/><circle cx="447.6" cy="204.0" r="2" fill="#a4edf5" stroke="none"/></g><path d="M54 220L300 364 546 220" fill="none" stroke="#a4edf5" stroke-opacity=".15"/></svg></div><div class="horizon-copy"><span class="horizon-state">IN DEVELOPMENT</span><h3>Dino Trails</h3><p>탐험하고 수집하며 성장하는 세계<br>공룡과 함께하는 경험을 구상합니다<span class="translation" lang="en">A world of exploration, collection and growth<br>Imagining an experience alongside dinosaurs</span></p><small>개발 방향이며 아직 플레이할 수 있는 제품이 아닙니다<span class="translation" lang="en">A development direction, not yet available to play</span></small></div></article>
+        <article id="security" class="horizon-row" tabindex="-1" data-reveal><div class="horizon-kind">02 &nbsp; SECURITY</div><div class="horizon-art security-art" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" aria-hidden="true" focusable="false"><defs><linearGradient id="shield-edge" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#a4edf5"/><stop offset=".36" stop-color="#1d5770"/><stop offset=".7" stop-color="#6db4c5"/><stop offset="1" stop-color="#0b1c2b"/></linearGradient><linearGradient id="shield-face" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#244a61"/><stop offset=".5" stop-color="#0b1c2b"/><stop offset="1" stop-color="#173b50"/></linearGradient><linearGradient id="shield-core" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7ed8e4"/><stop offset="1" stop-color="#1d5770"/></linearGradient><radialGradient id="shield-halo"><stop stop-color="#a4edf5" stop-opacity=".13"/><stop offset="1" stop-color="#a4edf5" stop-opacity="0"/></radialGradient></defs><ellipse cx="300" cy="219" rx="222" ry="171" fill="url(#shield-halo)"/><g class="security-shield"><path d="M300 69L438 124 426 251 382 315 300 365 218 315 174 251 162 124Z" fill="#0b1c2b" stroke="#1d5770" stroke-width="2"/><path d="M300 54L438 109 426 236 382 300 300 350 218 300 174 236 162 109Z" fill="url(#shield-edge)" stroke="#a4edf5" stroke-width="1.2"/><path d="M300 73L416 117 405 228 366 285 300 327 234 285 195 228 184 117Z" fill="url(#shield-face)" stroke="#a4edf5" stroke-opacity=".5"/><path d="M300 91L399 129 389 223 355 273 300 308 245 273 211 223 201 129Z" fill="none" stroke="#4e91a5" stroke-width="1"/><path d="M300 54V73M162 109L184 117M438 109L416 117M174 236L195 228M426 236L405 228M218 300L234 285M382 300L366 285M300 327V350" stroke="#a4edf5" stroke-opacity=".55"/><g fill="none" stroke="#559aae" stroke-width="1.4"><path d="M239 160H224V139M361 160H376V139M239 216H223V235L245 256M361 216H377V235L355 256M300 121V104M300 265V292"/><path d="M239 176L227 183V204M361 176L373 183V204"/></g><g fill="#a4edf5"><circle cx="224" cy="139" r="2.8"/><circle cx="376" cy="139" r="2.8"/><circle cx="245" cy="256" r="2.8"/><circle cx="355" cy="256" r="2.8"/><circle cx="300" cy="104" r="2.8"/><circle cx="300" cy="292" r="2.8"/></g></g><g class="security-core"><path d="M300 120L365 157V233L300 271 235 233V157Z" fill="#0b1c2b" stroke="#47899f"/><path d="M300 132L351 160V222L300 252 249 222V160Z" fill="#1d5770" stroke="#a4edf5" stroke-width="1.4"/><path d="M300 132L351 160 300 190 249 160Z" fill="#a4edf5"/><path d="M249 160L300 190V252L249 222Z" fill="#1d5770"/><path d="M300 190L351 160V222L300 252Z" fill="url(#shield-core)"/><path d="M300 151L319 162 300 173 281 162Z" fill="#1d5770"/><path d="M249 160L300 190 351 160M300 190V252" fill="none" stroke="#d0f6fa" stroke-opacity=".8" stroke-width="1.2"/><path d="M300 132L351 160V222L300 252 249 222V160Z" fill="none" stroke="#a4edf5" stroke-width="1.4"/></g></svg></div><div class="horizon-copy"><span class="horizon-state">RESEARCH DIRECTION</span><h3>시스템 보안 연구<span class="translation" lang="en">System security research</span></h3><p>스스로 만드는 시스템부터 검증하고 개선하며<br>신뢰할 수 있는 기술의 기반을 쌓습니다<span class="translation" lang="en">Testing and improving the systems we build<br>Establishing foundations for technology people can trust</span></p><small>기업용 보안 제품과 계약 서비스는 향후 목표입니다<span class="translation" lang="en">Enterprise security products and services are future goals</span></small></div></article>
+      </div>
+    </div>
+  </section>
+  <div class="shell utility-shell">
+<section id="premium" tabindex="-1" data-reveal>
         <div class="section-kicker">Premium</div>
-        <h2 class="section-title">반복되는 정산을, 한 단계 더 편하게<span class="translation" lang="en">More control over every settlement</span></h2>
-        <p class="section-lead">프리미엄 도구를 베타에서 바로 사용하세요 · 데이터는 현재 브라우저에 저장되며 결제 없이 이용할 수 있습니다</p>
-        <p class="translation" lang="en">Premium tools are available in the beta · Data stays in this browser and no payment is required</p>
+        <h2 class="section-title">반복되는 정산을 더 편하게<span class="translation" lang="en">More control over every settlement</span></h2>
+        <p class="section-lead">반복되는 작업을 위한 Premium 도구를 무료 베타에서 사용할 수 있습니다</p>
+        <p class="translation" lang="en">Premium tools for recurring work are available in the free beta</p>
         <div class="premium-box">
           <ul>
-            <li>원가 자동 매칭 규칙 · 시나리오 저장과 비교<span class="translation" lang="en">Cost matching rules · Saved scenarios and comparisons</span></li>
-            <li>월별 정산 타임라인 · 광고비 한도 알림<span class="translation" lang="en">Monthly settlement timeline · Advertising budget alerts</span></li>
-            <li>엑셀 보고서 · 인쇄 및 PDF 저장<span class="translation" lang="en">Excel reports · Print and save as PDF</span></li>
+            <li>원가 자동 매칭 규칙 시나리오 저장과 비교<span class="translation" lang="en">Cost matching rules Saved scenarios and comparisons</span></li>
+            <li>월별 정산 타임라인 광고비 한도 알림<span class="translation" lang="en">Monthly settlement timeline Advertising budget alerts</span></li>
+            <li>엑셀 보고서 인쇄 및 PDF 저장<span class="translation" lang="en">Excel reports Print and save as PDF</span></li>
           </ul>
           <a class="btn btn-primary" href="https://judanvy8-netizen.github.io/marginkit-pro-beta/#premium">프리미엄 도구 열기 ↗<span class="translation" lang="en">Open Premium tools</span></a>
-          <p>로그인으로 팀 권한과 클라우드 시나리오 저장·비교 이용 · 채널 API와 예약 발송은 준비 중<span class="translation" lang="en">Sign in for team roles and cloud scenario storage · Channel API imports and scheduled delivery are still planned</span></p>
+          <p>정산 파일과 기기 내 기록은 자동 전송되지 않습니다 팀 시나리오는 로그인한 작업공간에 직접 저장하며 채널 API 수집과 예약 이메일은 준비 중입니다<span class="translation" lang="en">Settlement files and local history are not uploaded automatically Explicitly save team scenarios in the signed-in workspace Channel API collection and scheduled email are in preparation</span></p>
         </div>
-      </section>
-
-      <section id="feedback">
-        <div class="section-kicker">Feedback</div>
-        <h2 class="section-title">먼저 체험하고, 피드백을 주세요<span class="translation" lang="en">Try it and tell us what you think</span></h2>
-        <p class="section-lead">불편한 점과 필요한 기능을 알려 주시면 ORVANTRO 정식 버전에 반영합니다.</p>
-        <p class="translation" lang="en">Tell us what is difficult and which features you need so we can improve ORVANTRO.</p>
-        <div class="feedback-box">
-          <form id="feedback-form">
-            <div class="grid">
-              <div>
-                <label for="fb-product">제품 <span lang="en">/ Product</span></label>
-                <select id="fb-product" name="product" required>
-                  <option value="ORVANTRO Hub">ORVANTRO Hub</option>
-                  <option>MarginKit</option>
-                  <option value="MarginKit 수익 시뮬레이터">MarginKit 수익 시뮬레이터 / Profit simulator</option>
-                  <option value="MarginKit 월간 정산">MarginKit 월간 정산 / Monthly settlement</option>
-                  <option>Insights</option>
-                </select>
-              </div>
-              <div>
-                <label for="fb-rating">만족도 <span lang="en">/ Rating</span></label>
-                <select id="fb-rating" name="rating" required>
-                  <option value="">선택 / Choose a rating</option>
-                  <option value="매우 만족">매우 만족 / Very satisfied</option>
-                  <option value="만족">만족 / Satisfied</option>
-                  <option value="보통">보통 / Neutral</option>
-                  <option value="아쉬움">아쉬움 / Dissatisfied</option>
-                  <option value="개선 필요">개선 필요 / Needs improvement</option>
-                </select>
-              </div>
-              <div>
-                <label for="fb-email">회신 이메일 (선택) <span lang="en">/ Reply email (optional)</span></label>
-                <input id="fb-email" name="email" type="email" maxlength="254" placeholder="you@example.com">
-              </div>
-              <div class="full">
-                <label for="fb-body">피드백 내용 <span lang="en">/ Feedback</span></label>
-                <textarea id="fb-body" name="body" maxlength="2000" required placeholder="필요한 기능이나 불편한 점 / What could we improve?"></textarea>
-              </div>
-            </div>
-            <div class="cta-row" style="margin-top:14px">
-              <button class="btn btn-primary" type="submit">메일 앱에서 피드백 작성<span class="translation" lang="en">Compose feedback in your email app</span></button>
-            </div>
-            <p class="feedback-help">메일 앱이 열립니다. 내용을 확인하고 직접 전송해 주세요. 비밀번호나 정산 파일 등 민감한 정보는 넣지 마세요.<span class="translation" lang="en">Your email app will open. Review and send the message yourself. Do not include passwords, settlement files or other sensitive information.</span></p>
-          </form>
-        </div>
-      </section>
-
-      <section id="roadmap">
-        <div class="section-kicker">Roadmap</div>
-        <h2 class="section-title">하나의 이름, 세 가지 개발 영역<span class="translation" lang="en">One name · Three areas of development</span></h2>
-        <p class="section-lead">실제로 쓸 수 있는 도구에서 시작해, 게임 경험과 보안 기술까지. 각 영역의 진행 상태를 분명하게 공개합니다.</p>
-        <p class="translation" lang="en">From practical tools to game experiences and security technology, with a clear account of what is available and what is still ahead.</p>
-
-        <div class="roadmap">
-          <article class="phase"><div class="num">01 / AVAILABLE IN BETA</div><h3>Software</h3><p>MarginKit과 Insights. 계산·기록·분석을 위한 웹 도구를 실제 사용과 피드백으로 다듬습니다.<span class="translation" lang="en">MarginKit and Insights: web tools for calculations, records and analysis, refined through use and feedback.</span></p></article>
-          <article class="phase"><div class="num">02 / DEVELOPMENT DIRECTION</div><h3>Games</h3><p>플레이어가 탐험하고 선택하는 세계. 게임 시스템과 경험을 개발하는 방향으로 확장합니다.<span class="translation" lang="en">Worlds that players can explore and shape. Developing game systems and experiences is part of our direction.</span></p></article>
-          <article class="phase"><div class="num">03 / RESEARCH DIRECTION</div><h3>Security</h3><p>안전한 시스템을 위한 보안 기술과 기반을 연구합니다. 기업용 보안 제품과 계약 서비스는 향후 목표입니다.<span class="translation" lang="en">Researching security technology and foundations for safer systems. Enterprise security products and services are future goals.</span></p></article>
-        </div>
-      </section>
-
-      <section id="community" aria-labelledby="community-heading">
+      </section><section data-reveal id="community" tabindex="-1" aria-labelledby="community-heading">
         <div class="section-kicker">Community</div>
         <h2 class="section-title" id="community-heading">ORVANTRO의 소식과 이야기<span class="translation" lang="en">News and conversations from ORVANTRO</span></h2>
-        <nav class="social-links" aria-label="공식 소셜 채널 / Official social channels">
+        <nav class="social-links" aria-label="공식 소셜 채널" data-ko-aria-label="공식 소셜 채널" data-en-aria-label="Official social channels">
           <a class="social-link" href="https://www.youtube.com/@ORVANTRO" target="_blank" rel="noopener noreferrer" aria-label="YouTube (새 탭 / new tab)" title="YouTube"><img src="./assets/icons/youtube.svg?v=20261101-neon" alt="" width="25" height="25"></a>
           <a class="social-link" href="https://x.com/orvantro" target="_blank" rel="noopener noreferrer" aria-label="X (새 탭 / new tab)" title="X"><img src="./assets/icons/x.svg?v=20261101-neon" alt="" width="25" height="25"></a>
           <a class="social-link" href="https://discord.gg/zu9W5uWmrr" target="_blank" rel="noopener noreferrer" aria-label="Discord (새 탭 / new tab)" title="Discord"><img src="./assets/icons/discord.svg?v=20261101-neon" alt="" width="25" height="25"></a>
           <a class="social-link" href="https://www.instagram.com/orvantro" target="_blank" rel="noopener noreferrer" aria-label="Instagram (새 탭 / new tab)" title="Instagram"><img src="./assets/icons/instagram.svg?v=20261101-neon" alt="" width="25" height="25"></a>
         </nav>
-      </section>
-
-      <section id="contact" class="contact">
+      </section><section id="feedback" tabindex="-1">
+        <details class="utility-disclosure"><summary><span class="disclosure-index">FEEDBACK</span><span>함께 다음 버전을 만듭니다<span class="translation" lang="en">Help shape the next version</span></span><i aria-hidden="true"></i></summary><div class="disclosure-content">
+        <h2 class="utility-title">직접 써 본 이야기를 들려주세요<span class="translation" lang="en">Try it and tell us what you think</span></h2>
+        <p class="section-lead">불편한 점과 필요한 기능을 알려 주시면 다음 버전 개선에 참고합니다</p>
+        <p class="translation" lang="en">Tell us what is difficult and which features you need so we can improve ORVANTRO</p>
+        <div class="feedback-box">
+          <form id="feedback-form">
+            <div class="grid">
+              <div>
+                <label for="fb-product" data-ko="제품" data-en="Product">제품 <span lang="en">Product</span></label>
+                <select id="fb-product" name="product" required>
+                  <option value="ORVANTRO Hub">ORVANTRO Hub</option>
+                  <option>MarginKit</option>
+                  <option value="MarginKit 수익 시뮬레이터" data-ko="MarginKit 수익 시뮬레이터" data-en="Profit simulator">MarginKit 수익 시뮬레이터 / Profit simulator</option>
+                  <option value="MarginKit 월간 정산" data-ko="MarginKit 월간 정산" data-en="Monthly settlement">MarginKit 월간 정산 / Monthly settlement</option>
+                  <option>Insights</option>
+                </select>
+              </div>
+              <div>
+                <label for="fb-rating" data-ko="만족도" data-en="Rating">만족도 <span lang="en">Rating</span></label>
+                <select id="fb-rating" name="rating" required>
+                  <option value="" data-ko="선택" data-en="Choose a rating">선택 / Choose a rating</option>
+                  <option value="매우 만족" data-ko="매우 만족" data-en="Very satisfied">매우 만족 / Very satisfied</option>
+                  <option value="만족" data-ko="만족" data-en="Satisfied">만족 / Satisfied</option>
+                  <option value="보통" data-ko="보통" data-en="Neutral">보통 / Neutral</option>
+                  <option value="아쉬움" data-ko="아쉬움" data-en="Dissatisfied">아쉬움 / Dissatisfied</option>
+                  <option value="개선 필요" data-ko="개선 필요" data-en="Needs improvement">개선 필요 / Needs improvement</option>
+                </select>
+              </div>
+              <div>
+                <label for="fb-email" data-ko="회신 이메일 선택" data-en="Reply email optional">회신 이메일 선택 <span lang="en">Reply email optional</span></label>
+                <input id="fb-email" name="email" type="email" maxlength="254" placeholder="you@example.com">
+              </div>
+              <div class="full">
+                <label for="fb-body" data-ko="피드백 내용" data-en="Feedback">피드백 내용 <span lang="en">Feedback</span></label>
+                <textarea id="fb-body" name="body" maxlength="2000" required placeholder="필요한 기능이나 불편한 점" data-ko-placeholder="필요한 기능이나 불편한 점" data-en-placeholder="Features you need or things to improve"></textarea>
+              </div>
+            </div>
+            <div class="cta-row" style="margin-top:14px">
+              <button class="btn btn-primary" id="feedback-submit" type="submit" disabled>메일 앱에서 피드백 작성<span class="translation" lang="en">Compose feedback in your email app</span></button>
+            </div>
+            <noscript><p class="feedback-help">피드백은 <a href="mailto:orvantro@gmail.com">orvantro@gmail.com</a>으로 보내주세요<span class="translation" lang="en">Send feedback to the email address above</span></p></noscript>
+            <p class="feedback-help">메일 앱이 열립니다 내용을 확인하고 직접 전송해 주세요 비밀번호나 정산 파일 등 민감한 정보는 넣지 마세요<span class="translation" lang="en">Your email app will open Review and send the message yourself Do not include passwords, settlement files or other sensitive information</span></p>
+          </form>
+        </div>
+      </div></details></section><section id="contact" tabindex="-1" class="contact" data-reveal>
         <div>
           <h2>다음 가능성에 대해 이야기해요<span class="translation" lang="en">Let’s talk about what comes next</span></h2>
-          <p>협업, 베타 피드백, 투자·파트너십 문의는 아래로 주세요. Made by ORVANTRO.<span class="translation" lang="en">Contact us for collaboration, beta feedback, investment or partnership enquiries. Made by ORVANTRO.</span></p>
+          <p>협업, 베타 피드백, 투자 파트너십 문의는 아래로 주세요<span class="translation" lang="en">Contact us for collaboration, beta feedback, investment or partnership enquiries</span></p>
         </div>
-        <a class="btn btn-primary" href="mailto:orvantro@gmail.com">orvantro@gmail.com</a>
-      </section>
+        <a class="contact-email" href="mailto:orvantro@gmail.com">orvantro@gmail.com</a>
+      </section><footer><a class="wordmark" href="#main-content">ORVANTRO</a><span>© 2026 ORVANTRO</span><div id="data-settings" class="footer-consent" tabindex="-1"><details class="footer-consent-details"><summary>방문 통계 설정<span class="translation" lang="en">Visit analytics settings</span></summary><div class="consent-popover"><h3 id="central-data-heading">방문 통계<span class="translation" lang="en">Visit analytics</span></h3><p>허용한 방문만 서비스 개선을 위한 통계에 포함됩니다<span class="translation" lang="en">Allow your visit to contribute to statistics that help improve the service</span></p><p class="consent-explanation">임시 식별자와 국가 기기 운영체제 브라우저 분류를 30일간 보관합니다 페이지 주소와 검색어 및 IP 원문은 저장하지 않습니다<span class="translation" lang="en">Temporary identifiers and country device operating system and browser categories are retained for 30 days Page URLs search terms and raw IP addresses are not stored</span></p><div class="consent-actions"><button class="btn btn-ghost" id="central-allow" type="button" disabled>방문 통계 허용<span class="translation" lang="en">Allow visit analytics</span></button><button class="btn btn-ghost" id="central-deny" type="button" disabled>허용 취소<span class="translation" lang="en">Withdraw consent</span></button></div><p id="central-consent-status" role="status">방문 통계 수집이 꺼져 있습니다</p></div></details></div><span>Software Games Security</span></footer></div></main>
 
-      <section class="privacy-note" aria-label="방문 기록 설정 / Visit history settings">
-        <h2>내 브라우저 방문 기록<span class="translation" lang="en">Local browser visit history</span></h2>
-        <p>기본값은 꺼짐입니다. 켜면 이 기기에서 최근 30일의 방문 기록을 표시하며, 오래된 기록은 다음 방문 때 정리합니다. 외부 분석 서비스로 전송하지 않습니다. 계산기와 Insights는 다른 도메인이라 이 홈페이지의 기록과 합쳐지지 않습니다.<span class="translation" lang="en">Off by default. When enabled, this device keeps visits from the last 30 days; older records are cleaned up on a later visit. No data is sent to external analytics services. The calculator and Insights use a different domain, so their records are not combined with this homepage’s records.</span></p>
-        <button class="btn btn-ghost" id="analytics-toggle" type="button" aria-pressed="false">로컬 방문 기록 켜기 / Enable local visit history</button>
-        <p id="analytics-status" role="status"></p>
-      </section>
-      <section class="privacy-note" aria-label="중앙 방문 집계 설정">
-        <h3>선택적 방문 집계<span class="translation" lang="en">Optional central analytics</span></h3>
-        <p>통계 수집에 동의한 방문만 집계합니다 · 사이트 이름과 임시 조회·탭 식별자를 전송하며 서버에서 접속 국가·기기 유형·운영체제·브라우저 종류를 분류해 30일간 보관합니다 · URL, 검색어, 주문 정보와 IP 원문은 저장하지 않습니다 · 네트워크 제공자는 연결 처리 중 IP 주소를 처리할 수 있습니다<span class="translation" lang="en">Only consenting visits are counted · The server stores coarse country, device, OS and browser categories for 30 days with temporary identifiers; raw IP addresses are not stored · Network providers may process IP addresses to handle connections</span></p>
-        <button class="btn btn-ghost" id="central-allow" type="button" disabled>중앙 집계 동의 / Allow central analytics</button>
-        <button class="btn btn-ghost" id="central-deny" type="button">동의 철회 / Withdraw consent</button>
-        <p id="central-consent-status" role="status">통계 수집 꺼짐 · 허용하면 현재 페이지부터 집계</p>
-      </section>
-      <footer>
-        <span>&copy; 2026 ORVANTRO. All rights reserved.</span>
-        <span>Software · Games · Security</span>
-      </footer>
-    </div>
-  </main>
-
-  <script src="./site.js?v=20261031-1" defer></script>
-  <script src="./orvantro-analytics.js" defer></script>
-  <script src="./locale.js" defer></script>
-  <script src="./central-config.js?v=20261101-cloud1" defer></script>
-  <script src="./central-collector.js?v=20261101-audience2" defer></script>
-  <script src="./central-controls.js" defer></script>
-</body>
-</html>
+<script src="./site.js?v=20261102-release1" defer></script>
+<script src="./locale.js?v=20261102-release1" defer></script>
+<script src="./central-config.js?v=20261101-cloud1" defer></script>
+<script src="./central-collector.js?v=20261101-audience2" defer></script>
+<script src="./central-controls.js?v=20261102-release1" defer></script>
+<script src="./motion.js?v=20261102-release1" defer></script>
+<script src="./experience.js?v=20261102-release1" defer></script>
+</body></html>
